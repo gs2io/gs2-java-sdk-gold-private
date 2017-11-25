@@ -1,0 +1,21 @@
+## Customize the test machine
+machine:
+  java:
+    version: oraclejdk8
+
+checkout:
+  post:
+    - SDK_PROJECT_REPONAME=${CIRCLE_PROJECT_REPONAME:0:${#CIRCLE_PROJECT_REPONAME}-8} && git clone -b ${CIRCLE_BRANCH} git@github.com:gs2io/${SDK_PROJECT_REPONAME}.git ~/${SDK_PROJECT_REPONAME}
+  
+test:
+  override:
+    - SDK_PROJECT_REPONAME=${CIRCLE_PROJECT_REPONAME:0:${#CIRCLE_PROJECT_REPONAME}-8} && cd ~/${SDK_PROJECT_REPONAME}/ && mvn install -Dgpg.skip=true && cp -rf ~/${SDK_PROJECT_REPONAME}/target ~/${CIRCLE_PROJECT_REPONAME}/target
+    - cd ~/${CIRCLE_PROJECT_REPONAME}/ && mvn integration-test
+  post:
+    - cp -rf ./target/site/jacoco $CIRCLE_ARTIFACTS
+
+deployment:
+  maven:
+    branch: master
+    commands:
+      - mvn deploy -Dmaven.test.skip=true
