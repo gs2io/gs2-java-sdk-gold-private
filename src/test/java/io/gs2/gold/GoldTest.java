@@ -1,4 +1,4 @@
-package io.gs2.inbox;
+package io.gs2.gold;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -8,246 +8,346 @@ import org.junit.runners.JUnit4;
 
 import io.gs2.exception.BadRequestException;
 import io.gs2.exception.NotFoundException;
-import io.gs2.inbox.control.CreateInboxRequest;
-import io.gs2.inbox.control.CreateInboxResult;
-import io.gs2.inbox.control.DeleteInboxRequest;
-import io.gs2.inbox.control.DescribeInboxByOwnerIdRequest;
-import io.gs2.inbox.control.DescribeInboxByOwnerIdResult;
-import io.gs2.inbox.control.DescribeInboxRequest;
-import io.gs2.inbox.control.DescribeInboxResult;
-import io.gs2.inbox.control.DescribeServiceClassRequest;
-import io.gs2.inbox.control.DescribeServiceClassResult;
-import io.gs2.inbox.control.GetInboxRequest;
-import io.gs2.inbox.control.GetInboxStatusRequest;
-import io.gs2.inbox.control.GetInboxStatusResult;
-import io.gs2.inbox.control.UpdateInboxRequest;
-import io.gs2.inbox.control.UpdateInboxResult;
-import io.gs2.inbox.model.Inbox;
+import io.gs2.gold.control.CreateGoldRequest;
+import io.gs2.gold.control.CreateGoldResult;
+import io.gs2.gold.control.GetGoldStatusRequest;
+import io.gs2.gold.control.GetGoldStatusResult;
+import io.gs2.gold.control.GetGoldRequest;
+import io.gs2.gold.control.GetGoldResult;
+import io.gs2.gold.control.UpdateGoldRequest;
+import io.gs2.gold.control.UpdateGoldResult;
+import io.gs2.gold.control.DescribeGoldRequest;
+import io.gs2.gold.control.DescribeGoldResult;
+import io.gs2.gold.control.DeleteGoldRequest;
+//import io.gs2.gold.control.DeleteGoldResult;
+import io.gs2.gold.model.Gold;
 import io.gs2.model.BasicGs2Credential;
 import junit.framework.TestCase;
 
+import java.util.Iterator;
+import java.util.List;
+
 @RunWith(JUnit4.class)
-public class InboxTest extends TestCase {
+public class GoldTest extends TestCase {
 
 	protected static String CLIENT_ID = "HovFAxYEvg0UMdUue740EQ==";
 	protected static String CLIENT_SECRET = "mHczQCWbukiCLd9ldCDRBw==";
-	protected static final String OWNER_ID = "7dWCSa0w";
-	protected static final String INBOX_NAME = "inbox-0001";
-	protected static final String INBOX_NAME2 = "inbox-0002";
-
-	protected static Gs2InboxClient client;
-	protected static Gs2InboxPrivateClient pclient;
+	protected static String OWNER_ID = "7dWCSa0w";
+	protected static String GOLD_NAME1 = "gold-0001";
+	protected static String GOLD_NAME2 = "gold-0002";
+	protected static String GOLD_NAME3 = "gold-0003";
+	
+	protected static Gs2GoldClient client;
+	// protected static Gs2GoldPrivateClient pclient;
 	
 	@BeforeClass
 	public static void startup() {
-		Gs2InboxClient.ENDPOINT = "inbox-dev";
-		client = pclient = new Gs2InboxPrivateClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
+		Gs2GoldClient.ENDPOINT = "gold-dev";
+		//client = pclient = new Gs2GoldPrivateClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
+		client = new Gs2GoldClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
 	}
 	
 	@Test
 	public void basic() {
-		Inbox inbox1 = null;
+		Gold gold1, gold2;
+
 		{
-			DescribeServiceClassRequest request = new DescribeServiceClassRequest();
-			DescribeServiceClassResult result = client.describeServiceClass(request);
+			CreateGoldRequest request = new CreateGoldRequest()
+					.withName(GOLD_NAME1)
+					.withDescription("Gold 1")
+					.withServiceClass("gold1.nano")
+					.withBalanceMax(2000)
+					.withRestrictionType("weekly")
+					.withResetDayOfMonth(0)
+					.withResetDayOfWeek("1")
+					.withResetHour(17)
+					.withPeriodicalLimit(450)
+					.withNotificationUrl("http://example.com/");
+			CreateGoldResult result = client.createGold(request);
 			assertNotNull(result);
-			assertNotSame(result.getCount(), 0);
-			assertTrue(result.getItems().contains("inbox1.nano"));
+			gold1 = result.getItem();
+			assertNotNull(gold1);
+			assertEquals(gold1.getOwnerId(), OWNER_ID);
+			assertEquals(gold1.getName(), GOLD_NAME1);
+			assertEquals(gold1.getDescription(), "Gold 1");
+			assertEquals(gold1.getServiceClass(), "gold1.nano");
+			assertEquals(gold1.getBalanceMax(), Integer.valueOf(2000));
+			assertEquals(gold1.getRestrictionType(), "weekly");
+			assertEquals(gold1.getResetDayOfWeek(), "1");		// TODO
+			assertEquals(gold1.getResetHour(), Integer.valueOf(17));
+			assertEquals(gold1.getPeriodicalLimit(), Integer.valueOf(450));
+			assertEquals(gold1.getNotificationUrl(), "http://example.com/");
+			assertNotNull(gold1.getCreateAt());
 		}
+
+		do {
+			GetGoldStatusRequest request = new GetGoldStatusRequest()
+					.withGoldName(GOLD_NAME1);
+			GetGoldStatusResult result = client.getGoldStatus(request);
+			String status = result.getStatus();
+			if (status.equals("ACTIVE")) break;
+			assertNotSame(status, "DELETED");
+			try {
+				Thread.sleep(1000 * 3);
+			} catch (InterruptedException e) { }
+		} while(true);
+
 		{
-			CreateInboxRequest request = new CreateInboxRequest()
-					.withName(INBOX_NAME)
-					.withServiceClass("inbox1.nano")
-					.withAutoDelete(true)
-					.withCooperationUrl("http://example.com/");
-			CreateInboxResult result = client.createInbox(request);
+			CreateGoldRequest request = new CreateGoldRequest()
+					.withName(GOLD_NAME2)
+					.withServiceClass("gold1.nano");
+			CreateGoldResult result = client.createGold(request);
 			assertNotNull(result);
-			inbox1 = result.getItem();
-			assertNotNull(inbox1);
-			assertEquals(inbox1.getOwnerId(), OWNER_ID);
-			assertEquals(inbox1.getName(), INBOX_NAME);
-			assertEquals(inbox1.getServiceClass(), "inbox1.nano");
-			assertTrue(inbox1.getAutoDelete());
-			assertEquals(inbox1.getCooperationUrl(), "http://example.com/");
+			gold2 = result.getItem();
+			assertNotNull(gold2);
+			assertEquals(gold2.getOwnerId(), OWNER_ID);
+			assertEquals(gold2.getName(), GOLD_NAME2);
+			assertNull(gold2.getDescription());
+			assertEquals(gold2.getServiceClass(), "gold1.nano");
+			assertEquals(gold2.getBalanceMax(), Integer.valueOf(99999999));
+			assertEquals(gold2.getRestrictionType(), "none");
+			assertNull(gold2.getResetDayOfMonth());
+			assertNull(gold2.getResetDayOfWeek());
+			assertNull(gold2.getResetHour());
+			assertEquals(gold2.getPeriodicalLimit(), Integer.valueOf(99999999));
+			assertNull(gold2.getNotificationUrl());
+			assertNotNull(gold2.getCreateAt());
 		}
+
+		do {
+			GetGoldStatusRequest request = new GetGoldStatusRequest()
+					.withGoldName(GOLD_NAME2);
+			GetGoldStatusResult result = client.getGoldStatus(request);
+			String status = result.getStatus();
+			if (status.equals("ACTIVE")) break;
+			assertNotSame(status, "DELETED");
+			try {
+				Thread.sleep(1000 * 3);
+			} catch (InterruptedException e) { }
+		} while(true);
+
 		{
-			do {
-				GetInboxStatusRequest request = new GetInboxStatusRequest()
-						.withInboxName(inbox1.getName());
-				GetInboxStatusResult result = client.getInboxStatus(request);
-				if(result.getStatus().equals("ACTIVE")) break;
-				assertNotSame(result.getStatus(), "DELETED");
-				try {
-					Thread.sleep(1000 * 5);
-				} catch (InterruptedException e) { }
-			} while(true);
-		}
-		Inbox inbox2 = null;
-		{
-			CreateInboxRequest request = new CreateInboxRequest()
-					.withName(INBOX_NAME2)
-					.withServiceClass("inbox1.nano")
-					.withAutoDelete(false);
-			CreateInboxResult result = client.createInbox(request);
+			GetGoldRequest request = new GetGoldRequest()
+					.withGoldName(GOLD_NAME1);
+			GetGoldResult result = client.getGold(request);
 			assertNotNull(result);
-			inbox2 = result.getItem();
-			assertNotNull(inbox2);
-			assertEquals(inbox2.getOwnerId(), OWNER_ID);
-			assertEquals(inbox2.getName(), INBOX_NAME2);
-			assertEquals(inbox2.getServiceClass(), "inbox1.nano");
-			assertFalse(inbox2.getAutoDelete());
-			assertNull(inbox2.getCooperationUrl());
+			gold1 = result.getItem();
+			assertNotNull(gold1);
+			assertEquals(gold1.getOwnerId(), OWNER_ID);
+			assertEquals(gold1.getName(), GOLD_NAME1);
+			assertEquals(gold1.getDescription(), "Gold 1");
+			assertEquals(gold1.getServiceClass(), "gold1.nano");
+			assertEquals(gold1.getBalanceMax(), Integer.valueOf(2000));
+			assertEquals(gold1.getRestrictionType(), "weekly");
+			assertEquals(gold1.getResetDayOfWeek(), "1");		// TODO
+			assertEquals(gold1.getResetHour(), Integer.valueOf(17));
+			assertEquals(gold1.getPeriodicalLimit(), Integer.valueOf(450));
+			assertEquals(gold1.getNotificationUrl(), "http://example.com/");
+			assertNotNull(gold1.getCreateAt());
 		}
-		try {
-			Thread.sleep(1000 * 5);
-		} catch (InterruptedException e) { }
+
 		{
-			do {
-				GetInboxStatusRequest request = new GetInboxStatusRequest()
-						.withInboxName(inbox2.getName());
-				GetInboxStatusResult result = client.getInboxStatus(request);
-				if(result.getStatus().equals("ACTIVE")) break;
-				assertNotSame(result.getStatus(), "DELETED");
-				try {
-					Thread.sleep(1000 * 5);
-				} catch (InterruptedException e) { }
-			} while(true);
-		}
-		{
-			GetInboxRequest request = new GetInboxRequest()
-					.withInboxName(inbox1.getName());
-			Inbox inbox = client.getInbox(request).getItem();
-			assertNotNull(inbox);
-			assertEquals(inbox.getOwnerId(), OWNER_ID);
-			assertEquals(inbox.getName(), INBOX_NAME);
-			assertEquals(inbox.getServiceClass(), "inbox1.nano");
-			assertTrue(inbox.getAutoDelete());
-			assertEquals(inbox.getCooperationUrl(), "http://example.com/");
-		}
-		{
-			UpdateInboxRequest request = new UpdateInboxRequest()
-					.withInboxName(inbox1.getName())
-					.withServiceClass("inbox1.micro")
-					.withCooperationUrl("https://example.com/");
-			UpdateInboxResult result = client.updateInbox(request);
+			UpdateGoldRequest request = new UpdateGoldRequest()
+					.withGoldName(GOLD_NAME1)
+					.withServiceClass("gold1.micro")
+					.withRestrictionType("none");
+			UpdateGoldResult result = client.updateGold(request);
 			assertNotNull(result);
-			inbox1 = result.getItem();
-			assertNotNull(inbox1);
-			assertEquals(inbox1.getOwnerId(), OWNER_ID);
-			assertEquals(inbox1.getName(), INBOX_NAME);
-			assertEquals(inbox1.getServiceClass(), "inbox1.micro");
-			assertTrue(inbox1.getAutoDelete());
-			assertEquals(inbox1.getCooperationUrl(), "https://example.com/");
+			gold1 = result.getItem();
+			assertNotNull(gold1);
+			assertEquals(gold1.getOwnerId(), OWNER_ID);
+			assertEquals(gold1.getName(), GOLD_NAME1);
+			assertNull(gold1.getDescription());
+			assertEquals(gold1.getServiceClass(), "gold1.micro");
+			assertEquals(gold1.getBalanceMax(), Integer.valueOf(99999999));
+			assertEquals(gold1.getRestrictionType(), "none");
+			assertNull(gold1.getResetDayOfMonth());
+			assertNull(gold1.getResetDayOfWeek());
+			assertNull(gold1.getResetHour());
+			assertEquals(gold1.getPeriodicalLimit(), Integer.valueOf(99999999));
+			assertNull(gold1.getNotificationUrl());
+			assertNotNull(gold1.getCreateAt());
 		}
+
+		do {
+			GetGoldStatusRequest request = new GetGoldStatusRequest()
+					.withGoldName(GOLD_NAME1);
+			GetGoldStatusResult result = client.getGoldStatus(request);
+			String status = result.getStatus();
+			if (status.equals("ACTIVE")) break;
+			assertNotSame(status, "DELETED");
+			try {
+				Thread.sleep(1000 * 3);
+			} catch (InterruptedException e) { }
+		} while(true);
+
+		/*
 		{
-			do {
-				GetInboxStatusRequest request = new GetInboxStatusRequest()
-						.withInboxName(inbox1.getName());
-				GetInboxStatusResult result = client.getInboxStatus(request);
-				if(result.getStatus().equals("ACTIVE")) break;
-				assertNotSame(result.getStatus(), "DELETED");
-				try {
-					Thread.sleep(1000 * 5);
-				} catch (InterruptedException e) { }
-			} while(true);
-		}
-		{
-			DescribeInboxByOwnerIdRequest request = new DescribeInboxByOwnerIdRequest()
+			DescribeGoldByOwnerIdRequest request = new DescribeGoldByOwnerIdRequest()
 					.withOwnerId(OWNER_ID);
-			DescribeInboxByOwnerIdResult result = pclient.describeInboxByOwnerId(request);
-			assertNotNull(result);
-			if(inbox2.getInboxId().equals(result.getItems().get(0).getInboxId())) {
-				Inbox t = inbox1;
-				inbox1 = inbox2;
-				inbox2 = t;
-			}
-			assertEquals(result.getCount(), Integer.valueOf(2));
-			assertEquals(result.getItems().size(), 2);
-			assertEquals(result.getItems().get(0).getOwnerId(), inbox1.getOwnerId());
-			assertEquals(result.getItems().get(0).getName(), inbox1.getName());
-			assertEquals(result.getItems().get(0).getServiceClass(), inbox1.getServiceClass());
-			assertEquals(result.getItems().get(0).getAutoDelete(), inbox1.getAutoDelete());
-			assertEquals(result.getItems().get(0).getCooperationUrl(), inbox1.getCooperationUrl());
-			assertEquals(result.getItems().get(1).getOwnerId(), inbox2.getOwnerId());
-			assertEquals(result.getItems().get(1).getName(), inbox2.getName());
-			assertEquals(result.getItems().get(1).getServiceClass(), inbox2.getServiceClass());
-			assertEquals(result.getItems().get(1).getAutoDelete(), inbox2.getAutoDelete());
-			assertEquals(result.getItems().get(1).getCooperationUrl(), inbox2.getCooperationUrl());
-			assertNull(result.getNextPageToken());
-		}
-		{
-			DescribeInboxRequest request = new DescribeInboxRequest();
-			DescribeInboxResult result = client.describeInbox(request);
-			assertNotNull(result);
-			if(inbox2.getInboxId().equals(result.getItems().get(0).getInboxId())) {
-				Inbox t = inbox1;
-				inbox1 = inbox2;
-				inbox2 = t;
-			}
-			assertEquals(result.getCount(), Integer.valueOf(2));
-			assertEquals(result.getItems().size(), 2);
-			assertEquals(result.getItems().get(0).getOwnerId(), inbox1.getOwnerId());
-			assertEquals(result.getItems().get(0).getName(), inbox1.getName());
-			assertEquals(result.getItems().get(0).getServiceClass(), inbox1.getServiceClass());
-			assertEquals(result.getItems().get(0).getAutoDelete(), inbox1.getAutoDelete());
-			assertEquals(result.getItems().get(0).getCooperationUrl(), inbox1.getCooperationUrl());
-			assertEquals(result.getItems().get(1).getOwnerId(), inbox2.getOwnerId());
-			assertEquals(result.getItems().get(1).getName(), inbox2.getName());
-			assertEquals(result.getItems().get(1).getServiceClass(), inbox2.getServiceClass());
-			assertEquals(result.getItems().get(1).getAutoDelete(), inbox2.getAutoDelete());
-			assertEquals(result.getItems().get(1).getCooperationUrl(), inbox2.getCooperationUrl());
-			assertNull(result.getNextPageToken());
-		}
-		{
-			DescribeInboxRequest request = new DescribeInboxRequest()
-					.withLimit(1);
-			DescribeInboxResult result = client.describeInbox(request);
-			assertNotNull(result);
-			assertEquals(result.getItems().size(), 1);
-			assertEquals(result.getItems().get(0).getOwnerId(), inbox1.getOwnerId());
-			assertEquals(result.getItems().get(0).getName(), inbox1.getName());
-			assertEquals(result.getItems().get(0).getServiceClass(), inbox1.getServiceClass());
-			assertEquals(result.getItems().get(0).getAutoDelete(), inbox1.getAutoDelete());
-			assertEquals(result.getItems().get(0).getCooperationUrl(), inbox1.getCooperationUrl());
-			assertNotNull(result.getNextPageToken());
+			DescribeGoldByOwnerIdResult result = client.describeGoldByOwnerId(request);
+			items, next_page_token = result["items"], result["nextPageToken"]
+			eq_(len(items), 2)
 
-			request = new DescribeInboxRequest()
-					.withPageToken(result.getNextPageToken())
-					.withLimit(10);
-			result = client.describeInbox(request);
+			if items[1]["name"] == gold1["name"]:
+			gold1, gold2 = gold2, gold1
+
+			assertEquals(result.getItems().get(0).getOwnerId(), gold1.getOwnerId());
+			assertEquals(result.getItems().get(0).getName(), gold1.getName());
+			assertEquals(result.getItems().get(0).getDescription(), gold1.getDescription());
+			assertEquals(result.getItems().get(0).getServiceClass(), gold1.getServiceClass());
+			assertEquals(result.getItems().get(0).getBalanceMax(), gold1.getBalanceMax());
+			assertEquals(result.getItems().get(0).getRestrictionType(), gold1.getRestrictionType());
+			assertEquals(result.getItems().get(0).getResetDayOfWeek(), gold1.getResetDayOfWeek());
+			assertEquals(result.getItems().get(0).getResetHour(), gold1.getResetHour());
+			assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold1.getPeriodicalLimit());
+			assertEquals(result.getItems().get(0).getNotificationUrl(), gold1.getNotificationUrl());
+			ok_(items[0]["createAt"])
+			assertEquals(result.getItems().get(1).getOwnerId(), gold2.getOwnerId());
+			assertEquals(result.getItems().get(1).getName(), gold2.getName());
+			assertEquals(result.getItems().get(1).getDescription(), gold2.getDescription());
+			assertEquals(result.getItems().get(1).getServiceClass(), gold2.getServiceClass());
+			assertEquals(result.getItems().get(1).getBalanceMax(), gold2.getBalanceMax());
+			assertEquals(result.getItems().get(1).getRestrictionType(), gold2.getRestrictionType());
+			assertEquals(result.getItems().get(1).getResetDayOfWeek(), gold2.getResetDayOfWeek());
+			assertEquals(result.getItems().get(1).getResetHour(), gold2.getResetHour());
+			assertEquals(result.getItems().get(1).getPeriodicalLimit(), gold2.getPeriodicalLimit());
+			assertEquals(result.getItems().get(1).getNotificationUrl(), gold2.getNotificationUrl());
+			ok_(items[1]["createAt"])
+			assertNull(next_page_token);
+		}
+		*/
+
+		{
+			DescribeGoldRequest request = new DescribeGoldRequest();
+			DescribeGoldResult result = client.describeGold(request);
 			assertNotNull(result);
-			assertEquals(result.getItems().size(), 1);
-			assertEquals(result.getItems().get(0).getOwnerId(), inbox2.getOwnerId());
-			assertEquals(result.getItems().get(0).getName(), inbox2.getName());
-			assertEquals(result.getItems().get(0).getServiceClass(), inbox2.getServiceClass());
-			assertEquals(result.getItems().get(0).getAutoDelete(), inbox2.getAutoDelete());
-			assertEquals(result.getItems().get(0).getCooperationUrl(), inbox2.getCooperationUrl());
+			if(gold2.getGoldId().equals(result.getItems().get(0).getGoldId())) {
+				Gold t = gold1;
+				gold1 = gold2;
+				gold2 = t;
+			}
+			//assertEquals(result.getCount(), Integer.valueOf(2));
+			assertEquals(result.getItems().size(), 2);
+			assertEquals(result.getItems().get(0).getOwnerId(), gold1.getOwnerId());
+			assertEquals(result.getItems().get(0).getName(), gold1.getName());
+			assertEquals(result.getItems().get(0).getDescription(), gold1.getDescription());
+			assertEquals(result.getItems().get(0).getServiceClass(), gold1.getServiceClass());
+			assertEquals(result.getItems().get(0).getBalanceMax(), gold1.getBalanceMax());
+			assertEquals(result.getItems().get(0).getRestrictionType(), gold1.getRestrictionType());
+			assertEquals(result.getItems().get(0).getResetDayOfWeek(), gold1.getResetDayOfWeek());
+			assertEquals(result.getItems().get(0).getResetHour(), gold1.getResetHour());
+			assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold1.getPeriodicalLimit());
+			assertEquals(result.getItems().get(0).getNotificationUrl(), gold1.getNotificationUrl());
+			assertNotNull(result.getItems().get(0).getCreateAt());
+			assertEquals(result.getItems().get(1).getOwnerId(), gold2.getOwnerId());
+			assertEquals(result.getItems().get(1).getName(), gold2.getName());
+			assertEquals(result.getItems().get(1).getDescription(), gold2.getDescription());
+			assertEquals(result.getItems().get(1).getServiceClass(), gold2.getServiceClass());
+			assertEquals(result.getItems().get(1).getBalanceMax(), gold2.getBalanceMax());
+			assertEquals(result.getItems().get(1).getRestrictionType(), gold2.getRestrictionType());
+			assertEquals(result.getItems().get(1).getResetDayOfWeek(), gold2.getResetDayOfWeek());
+			assertEquals(result.getItems().get(1).getResetHour(), gold2.getResetHour());
+			assertEquals(result.getItems().get(1).getPeriodicalLimit(), gold2.getPeriodicalLimit());
+			assertEquals(result.getItems().get(1).getNotificationUrl(), gold2.getNotificationUrl());
+			assertNotNull(result.getItems().get(1).getCreateAt());
 			assertNull(result.getNextPageToken());
 		}
+
 		{
-			DeleteInboxRequest request = new DeleteInboxRequest()
-					.withInboxName(inbox1.getName());
-			client.deleteInbox(request);
+			String nextPageToken;
+
+			{
+				DescribeGoldRequest request = new DescribeGoldRequest()
+						.withLimit(1);
+				DescribeGoldResult result = client.describeGold(request);
+				assertNotNull(result);
+				//assertEquals(result.getCount(), Integer.valueOf(1));
+				assertEquals(result.getItems().size(), 1);
+				assertEquals(result.getItems().get(0).getOwnerId(), gold1.getOwnerId());
+				assertEquals(result.getItems().get(0).getName(), gold1.getName());
+				assertEquals(result.getItems().get(0).getDescription(), gold1.getDescription());
+				assertEquals(result.getItems().get(0).getServiceClass(), gold1.getServiceClass());
+				assertEquals(result.getItems().get(0).getBalanceMax(), gold1.getBalanceMax());
+				assertEquals(result.getItems().get(0).getRestrictionType(), gold1.getRestrictionType());
+				assertEquals(result.getItems().get(0).getResetDayOfWeek(), gold1.getResetDayOfWeek());
+				assertEquals(result.getItems().get(0).getResetHour(), gold1.getResetHour());
+				assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold1.getPeriodicalLimit());
+				assertEquals(result.getItems().get(0).getNotificationUrl(), gold1.getNotificationUrl());
+				assertNotNull(result.getItems().get(0).getCreateAt());
+				assertNotNull(result.getNextPageToken());
+
+				nextPageToken = result.getNextPageToken();
+			}
+
+			{
+				DescribeGoldRequest request = new DescribeGoldRequest()
+						.withPageToken(nextPageToken);
+				DescribeGoldResult result = client.describeGold(request);
+				assertNotNull(result);
+				//assertEquals(result.getCount(), Integer.valueOf(1));
+				assertEquals(result.getItems().size(), 1);
+				assertEquals(result.getItems().get(0).getOwnerId(), gold2.getOwnerId());
+				assertEquals(result.getItems().get(0).getName(), gold2.getName());
+				assertEquals(result.getItems().get(0).getDescription(), gold2.getDescription());
+				assertEquals(result.getItems().get(0).getServiceClass(), gold2.getServiceClass());
+				assertEquals(result.getItems().get(0).getBalanceMax(), gold2.getBalanceMax());
+				assertEquals(result.getItems().get(0).getRestrictionType(), gold2.getRestrictionType());
+				assertEquals(result.getItems().get(0).getResetDayOfWeek(), gold2.getResetDayOfWeek());
+				assertEquals(result.getItems().get(0).getResetHour(), gold2.getResetHour());
+				assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold2.getPeriodicalLimit());
+				assertEquals(result.getItems().get(0).getNotificationUrl(), gold2.getNotificationUrl());
+				assertNotNull(result.getItems().get(0).getCreateAt());
+				assertNull(result.getNextPageToken());
+			}
 		}
-		try {
-			GetInboxRequest request = new GetInboxRequest()
-					.withInboxName(inbox1.getName());
-			client.getInbox(request).getItem();
-			assertTrue(false);
-		} catch(NotFoundException e) {}
+
 		{
-			DeleteInboxRequest request = new DeleteInboxRequest()
-					.withInboxName(inbox2.getName());
-			client.deleteInbox(request);
+			List<Gold> items;
+
+			{
+				DescribeGoldRequest request = new DescribeGoldRequest();
+				DescribeGoldResult result = client.describeGold(request);
+
+				items = result.getItems();
+			}
+
+			for (Iterator<Gold> itr = items.iterator(); itr.hasNext(); ) {
+				Gold item = itr.next();
+
+				do {
+					GetGoldStatusRequest request = new GetGoldStatusRequest()
+							.withGoldName(item.getName());
+					GetGoldStatusResult result = client.getGoldStatus(request);
+					String status = result.getStatus();
+					if (status.equals("ACTIVE")) break;
+					assertNotSame(status, "DELETED");
+					try {
+						Thread.sleep(1000 * 3);
+					} catch (InterruptedException e) { }
+				} while(true);
+
+				{
+					DeleteGoldRequest request = new DeleteGoldRequest()
+							.withGoldName(item.getName());
+					// DeleteGoldResult result = client.deleteGold(request);
+					client.deleteGold(request);
+				}
+
+				do {
+					GetGoldStatusRequest request = new GetGoldStatusRequest()
+							.withGoldName(item.getName());
+					GetGoldStatusResult result = client.getGoldStatus(request);
+					String status = result.getStatus();
+					if (status.equals("DELETED")) break;
+					try {
+						Thread.sleep(1000 * 3);
+					} catch (InterruptedException e) { }
+				} while(true);
+			}
 		}
-		try {
-			GetInboxRequest request = new GetInboxRequest()
-					.withInboxName(inbox2.getName());
-			client.getInbox(request).getItem();
-			assertTrue(false);
-		} catch(NotFoundException e) {}
 	}
-
+/*
 	@Test(expected=NullPointerException.class)
 	public void createInboxNull() {
 		client.createInbox(null);
@@ -315,18 +415,41 @@ public class InboxTest extends TestCase {
 			assertEquals(e.getErrors().get(0).getMessage(), "inbox.inbox.error.notFound");
 		}
 	}
-
+*/
 	@AfterClass
 	public static void shutdown() {
+		do {
+			GetGoldStatusRequest request = new GetGoldStatusRequest()
+					.withGoldName(GOLD_NAME1);
+			GetGoldStatusResult result = client.getGoldStatus(request);
+			String status = result.getStatus();
+			if (status.equals("ACTIVE") || status.equals("DELETED")) break;
+			try {
+				Thread.sleep(1000 * 3);
+			} catch (InterruptedException e) { }
+		} while(true);
+
 		try {
-			DeleteInboxRequest request = new DeleteInboxRequest()
-					.withInboxName(INBOX_NAME);
-			client.deleteInbox(request);
+			DeleteGoldRequest request = new DeleteGoldRequest()
+					.withGoldName(GOLD_NAME1);
+			client.deleteGold(request);
 		} catch (NotFoundException e) {}
+
+		do {
+			GetGoldStatusRequest request = new GetGoldStatusRequest()
+					.withGoldName(GOLD_NAME2);
+			GetGoldStatusResult result = client.getGoldStatus(request);
+			String status = result.getStatus();
+			if (status.equals("ACTIVE") || status.equals("DELETED")) break;
+			try {
+				Thread.sleep(1000 * 3);
+			} catch (InterruptedException e) { }
+		} while(true);
+
 		try {
-			DeleteInboxRequest request = new DeleteInboxRequest()
-					.withInboxName(INBOX_NAME2);
-			client.deleteInbox(request);
+			DeleteGoldRequest request = new DeleteGoldRequest()
+					.withGoldName(GOLD_NAME2);
+			client.deleteGold(request);
 		} catch (NotFoundException e) {}
 	}
 }
