@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.gs2</groupId>
-	<artifactId>gs2-java-sdk-inbox-private</artifactId>
+	<artifactId>gs2-java-sdk-gold-private</artifactId>
 	<version>0.2.0</version>
 	<dependencies>
 		<dependency>
@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.gs2</groupId>
-			<artifactId>gs2-java-sdk-inbox</artifactId>
+			<artifactId>gs2-java-sdk-gold</artifactId>
 			<version>0.2.0</version>
 		</dependency>
 	</dependencies>
