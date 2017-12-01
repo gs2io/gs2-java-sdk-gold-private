@@ -40,7 +40,70 @@ public class GoldTest extends TestCase {
 	
 	protected static Gs2GoldClient client;
 	// protected static Gs2GoldPrivateClient pclient;
-	
+
+	protected static void ensureGoldEmpty() {
+		List<Gold> items;
+
+		{
+			DescribeGoldRequest request = new DescribeGoldRequest();
+			DescribeGoldResult result = client.describeGold(request);
+
+			items = result.getItems();
+		}
+
+		for (Iterator<Gold> itr = items.iterator(); itr.hasNext(); ) {
+			Gold item = itr.next();
+
+			do {
+				GetGoldStatusRequest request = new GetGoldStatusRequest()
+						.withGoldName(item.getName());
+				GetGoldStatusResult result = client.getGoldStatus(request);
+				String status = result.getStatus();
+				if (status.equals("ACTIVE")) break;
+				assertNotSame(status, "DELETED");
+				try {
+					Thread.sleep(1000 * 3);
+				} catch (InterruptedException e) { }
+			} while(true);
+
+			{
+				DeleteGoldRequest request = new DeleteGoldRequest()
+						.withGoldName(item.getName());
+				// DeleteGoldResult result = client.deleteGold(request);
+				client.deleteGold(request);
+			}
+
+			do {
+				GetGoldStatusRequest request = new GetGoldStatusRequest()
+						.withGoldName(item.getName());
+				GetGoldStatusResult result = client.getGoldStatus(request);
+				String status = result.getStatus();
+				if (status.equals("DELETED")) break;
+				try {
+					Thread.sleep(1000 * 3);
+				} catch (InterruptedException e) { }
+			} while(true);
+		}
+	}
+
+	protected static void ensureGoldExists() {
+		CreateGoldRequest request = new CreateGoldRequest()
+				.withName(GOLD_NAME1)
+				.withDescription("Gold 1")
+				.withServiceClass("gold1.nano")
+				.withBalanceMax(2000)
+				.withRestrictionType("weekly")
+				.withResetDayOfMonth(0)
+				.withResetDayOfWeek("1")
+				.withResetHour(17)
+				.withPeriodicalLimit(450)
+				.withNotificationUrl("http://example.com/");
+		try {
+			client.createGold(request);
+		} catch (BadRequestException e) {
+		}
+	}
+
 	@BeforeClass
 	public static void startup() {
 		Gs2GoldClient.ENDPOINT = "gold-dev";
@@ -50,6 +113,8 @@ public class GoldTest extends TestCase {
 	
 	@Test
 	public void basic() {
+		ensureGoldEmpty();
+
 		Gold gold1, gold2;
 
 		{
@@ -351,6 +416,8 @@ public class GoldTest extends TestCase {
 
 	@Test
     public void testCreateGoldNameNone() {
+		ensureGoldEmpty();
+
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
 					//         .withName(GOLD_NAME1)
@@ -386,7 +453,9 @@ public class GoldTest extends TestCase {
 
 	@Test
     public void testCreateGoldNameInvalid() {
-        CreateGoldRequest request = new CreateGoldRequest()
+		ensureGoldEmpty();
+
+		CreateGoldRequest request = new CreateGoldRequest()
                 .withName("#")
                 .withServiceClass("gold1.nano")
                 .withRestrictionType("none");
@@ -403,6 +472,8 @@ public class GoldTest extends TestCase {
 
 	@Test
     public void testCreateGoldServiceClassNone() {
+		ensureGoldEmpty();
+
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
 					.withName(GOLD_NAME1)
@@ -438,7 +509,9 @@ public class GoldTest extends TestCase {
 
 	@Test
     public void testCreateGoldServiceClassInvalid() {
-        CreateGoldRequest request = new CreateGoldRequest()
+		ensureGoldEmpty();
+
+		CreateGoldRequest request = new CreateGoldRequest()
                 .withName(GOLD_NAME1)
                 .withServiceClass("invalid")
                 .withRestrictionType("none");
@@ -455,7 +528,9 @@ public class GoldTest extends TestCase {
 
 	@Test
     public void testCreateGoldNotificationUrlInvalid() {
-        CreateGoldRequest request = new CreateGoldRequest()
+		ensureGoldEmpty();
+
+		CreateGoldRequest request = new CreateGoldRequest()
                 .withName(GOLD_NAME1)
                 .withServiceClass("gold1.nano")
                 .withRestrictionType("none")
@@ -473,6 +548,8 @@ public class GoldTest extends TestCase {
 
 	@Test
     public void testDeleteGoldNameNone() {
+		ensureGoldEmpty();
+
 		{
 			DeleteGoldRequest request = new DeleteGoldRequest();
 			//                 .withGoldName(GOLD_NAME1)
@@ -504,6 +581,8 @@ public class GoldTest extends TestCase {
 
 	@Test
     public void testDeleteGoldNameInvalid() {
+		ensureGoldEmpty();
+
         DeleteGoldRequest request = new DeleteGoldRequest()
                 .withGoldName("invalid");
         try {
@@ -571,47 +650,6 @@ public class GoldTest extends TestCase {
 
 	@AfterClass
 	public static void shutdown() {
-		List<Gold> items;
-
-		{
-			DescribeGoldRequest request = new DescribeGoldRequest();
-			DescribeGoldResult result = client.describeGold(request);
-
-			items = result.getItems();
-		}
-
-		for (Iterator<Gold> itr = items.iterator(); itr.hasNext(); ) {
-			Gold item = itr.next();
-
-			do {
-				GetGoldStatusRequest request = new GetGoldStatusRequest()
-						.withGoldName(item.getName());
-				GetGoldStatusResult result = client.getGoldStatus(request);
-				String status = result.getStatus();
-				if (status.equals("ACTIVE")) break;
-				assertNotSame(status, "DELETED");
-				try {
-					Thread.sleep(1000 * 3);
-				} catch (InterruptedException e) { }
-			} while(true);
-
-			{
-				DeleteGoldRequest request = new DeleteGoldRequest()
-						.withGoldName(item.getName());
-				// DeleteGoldResult result = client.deleteGold(request);
-				client.deleteGold(request);
-			}
-
-			do {
-				GetGoldStatusRequest request = new GetGoldStatusRequest()
-						.withGoldName(item.getName());
-				GetGoldStatusResult result = client.getGoldStatus(request);
-				String status = result.getStatus();
-				if (status.equals("DELETED")) break;
-				try {
-					Thread.sleep(1000 * 3);
-				} catch (InterruptedException e) { }
-			} while(true);
-		}
+		ensureGoldEmpty();
 	}
 }
