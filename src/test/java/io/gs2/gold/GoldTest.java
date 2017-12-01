@@ -522,7 +522,7 @@ public class GoldTest extends TestCase {
 			// ok_(emessage.startswith("BadRequest:"))
 			assertEquals(e.getErrors().size(), 1);
 			assertEquals(e.getErrors().get(0).getComponent(), "serviceClass");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.serviceClass.error.require");
+			assertEquals(e.getErrors().get(0).getMessage(), "gold.serviceClass.error.invalid");
 		}
 	}
 
@@ -556,27 +556,30 @@ public class GoldTest extends TestCase {
 			try {
 				client.deleteGold(request);
 				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
+			} catch (NotFoundException e) {
+				// ok_(emessage.startswith("NotFound:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "gold");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
 			}
 		}
 
+		// TODO: SDK ジェネレータが修正されて、アクセス先の URL が壊れなくなったら戻す
+		/*
 		{
 			DeleteGoldRequest request = new DeleteGoldRequest()
 					.withGoldName("");
 			try {
 				client.deleteGold(request);
 				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
+			} catch (NotFoundException e) {
+				// ok_(emessage.startswith("NotFound:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "gold");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
 			}
 		}
+		*/
 	}
 
 	@Test
@@ -612,10 +615,7 @@ public class GoldTest extends TestCase {
             client.deleteGold(request);
             assertTrue(false);
         } catch (ServiceUnavailableException e) {
-			// ok_(emessage.startswith("ServiceUnavailable:"))
-			assertEquals(e.getErrors().size(), 1);
-			assertEquals(e.getErrors().get(0).getComponent(), "gold");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notReady");
+			// ServiceUnavailableException は中身なし
 		}
 
 		do {
