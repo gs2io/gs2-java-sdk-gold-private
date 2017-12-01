@@ -349,6 +349,7 @@ public class GoldTest extends TestCase {
 		}
 	}
 
+	@Test
     public void testCreateGoldNameNone() {
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
@@ -383,7 +384,7 @@ public class GoldTest extends TestCase {
 		}
 	}
 
-
+	@Test
     public void testCreateGoldNameInvalid() {
         CreateGoldRequest request = new CreateGoldRequest()
                 .withName("#")
@@ -400,6 +401,7 @@ public class GoldTest extends TestCase {
 		}
 	}
 
+	@Test
     public void testCreateGoldServiceClassNone() {
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
@@ -434,6 +436,7 @@ public class GoldTest extends TestCase {
 		}
 	}
 
+	@Test
     public void testCreateGoldServiceClassInvalid() {
         CreateGoldRequest request = new CreateGoldRequest()
                 .withName(GOLD_NAME1)
@@ -450,6 +453,7 @@ public class GoldTest extends TestCase {
 		}
 	}
 
+	@Test
     public void testCreateGoldNotificationUrlInvalid() {
         CreateGoldRequest request = new CreateGoldRequest()
                 .withName(GOLD_NAME1)
@@ -467,6 +471,7 @@ public class GoldTest extends TestCase {
 		}
 	}
 
+	@Test
     public void testDeleteGoldNameNone() {
 		{
 			DeleteGoldRequest request = new DeleteGoldRequest();
@@ -497,6 +502,7 @@ public class GoldTest extends TestCase {
 		}
 	}
 
+	@Test
     public void testDeleteGoldNameInvalid() {
         DeleteGoldRequest request = new DeleteGoldRequest()
                 .withGoldName("invalid");
@@ -511,6 +517,7 @@ public class GoldTest extends TestCase {
 		}
 	}
 
+	@Test
     public void testDeleteGoldGoldNotActive() {
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
