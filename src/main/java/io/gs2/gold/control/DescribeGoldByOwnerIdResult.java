@@ -1,29 +1,29 @@
-package io.gs2.inbox.control;
+package io.gs2.gold.control;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import io.gs2.inbox.model.Inbox;
+import io.gs2.gold.model.Gold;
 
 /**
- * 受信ボックス一覧取得結果。
+ * ゴールド一覧取得結果。
  * 
  * @author Game Server Services, Inc.
  *
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class DescribeInboxByOwnerIdResult {
+public class DescribeGoldByOwnerIdResult {
 
-	/** 受信ボックス一覧 */
-	List<Inbox> items;
+	/** ゴールド一覧 */
+	List<Gold> items;
 	/** 次のページを取得するためのトークン */
 	String nextPageToken;
 	
 	/**
-	 * 取得した受信ボックス数を取得。
+	 * 取得したゴールド数を取得。
 	 * 
-	 * @return 取得した受信ボックス数
+	 * @return 取得したゴールド数
 	 */
 	public Integer getCount() {
 		return items == null ? null : items.size();
@@ -33,27 +33,27 @@ public class DescribeInboxByOwnerIdResult {
 	public void setCount(Integer count){ }
 	
 	/**
-	 * 取得した受信ボックス一覧を取得。
+	 * 取得したゴールド一覧を取得。
 	 * 
-	 * @return 受信ボックス一覧
+	 * @return ゴールド一覧
 	 */
-	public List<Inbox> getItems() {
+	public List<Gold> getItems() {
 		return items;
 	}
 	
 	/**
-	 * 受信ボックス一覧を設定。
+	 * ゴールド一覧を設定。
 	 * 
-	 * @param items 受信ボックス一覧
+	 * @param items ゴールド一覧
 	 */
-	public void setItems(List<Inbox> items) {
+	public void setItems(List<Gold> items) {
 		this.items = items;
 	}
 	
 	/**
 	 * 次のページを取得するためのトークンを取得。
 	 * 
-	 * {@link DescribeInboxByOwnerIdRequest} に指定することで、次のページを取得できます。
+	 * {@link DescribeGoldByOwnerIdRequest} に指定することで、次のページを取得できます。
 	 * 
 	 * @return トークン
 	 */

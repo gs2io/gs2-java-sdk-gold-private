@@ -1,54 +1,54 @@
-package io.gs2.inbox.control;
+package io.gs2.gold.control;
 
 import io.gs2.control.Gs2BasicRequest;
-import io.gs2.inbox.Gs2Inbox;
+import io.gs2.gold.Gs2Gold;
 
 /**
- * 受信ボックス内のメッセージ一覧の取得リクエスト。
+ * ゴールド内のウォレット一覧の取得リクエスト。
  * 
  * @author Game Server Services, Inc.
  *
  */
 @SuppressWarnings("serial")
-public class DescribeAllMessageRequest extends Gs2BasicRequest<DescribeAllMessageRequest> {
+public class DescribeAllWalletRequest extends Gs2BasicRequest<DescribeAllWalletRequest> {
 
-	public static class Constant extends Gs2Inbox.Constant {
-		public static final String FUNCTION = "DescribeMessage";
+	public static class Constant extends Gs2Gold.Constant {
+		public static final String FUNCTION = "DescribeWallet";
 	}
 
-	/** 受信ボックスID */
-	String inboxId;
+	/** ゴールドID */
+	String goldId;
 	/** 取得件数 */
 	Integer limit;
 	/** 取得開始位置トークン */
 	String pageToken;
 
 	/**
-	 * 受信ボックスIDを取得。
+	 * ゴールドIDを取得。
 	 * 
-	 * @return 受信ボックスID
+	 * @return ゴールドID
 	 */
-	public String getInboxId() {
-		return inboxId;
+	public String getGoldId() {
+		return goldId;
 	}
 	
 	/**
-	 * 受信ボックスIDを設定。
+	 * ゴールドIDを設定。
 	 * 
-	 * @param inboxId 受信ボックスID
+	 * @param goldId ゴールドID
 	 */
-	public void setInboxId(String inboxId) {
-		this.inboxId = inboxId;
+	public void setGoldId(String goldId) {
+		this.goldId = goldId;
 	}
 	
 	/**
-	 * 受信ボックスIDを設定。
+	 * ゴールドIDを設定。
 	 * 
-	 * @param inboxId 受信ボックスID
+	 * @param goldId ゴールドID
 	 * @return this
 	 */
-	public DescribeAllMessageRequest withInboxId(String inboxId) {
-		setInboxId(inboxId);
+	public DescribeAllWalletRequest withGoldId(String goldId) {
+		setGoldId(goldId);
 		return this;
 	}
 
@@ -76,7 +76,7 @@ public class DescribeAllMessageRequest extends Gs2BasicRequest<DescribeAllMessag
 	 * @param pageToken 取得開始位置トークン
 	 * @return this
 	 */
-	public DescribeAllMessageRequest withPageToken(String pageToken) {
+	public DescribeAllWalletRequest withPageToken(String pageToken) {
 		setPageToken(pageToken);
 		return this;
 	}
@@ -105,7 +105,7 @@ public class DescribeAllMessageRequest extends Gs2BasicRequest<DescribeAllMessag
 	 * @param limit 取得件数
 	 * @return this
 	 */
-	public DescribeAllMessageRequest withLimit(Integer limit) {
+	public DescribeAllWalletRequest withLimit(Integer limit) {
 		setLimit(limit);
 		return this;
 	}

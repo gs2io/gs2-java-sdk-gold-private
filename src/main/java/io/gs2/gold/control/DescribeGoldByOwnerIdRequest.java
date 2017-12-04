@@ -1,19 +1,19 @@
-package io.gs2.inbox.control;
+package io.gs2.gold.control;
 
 import io.gs2.control.Gs2BasicRequest;
-import io.gs2.inbox.Gs2Inbox;
+import io.gs2.gold.Gs2Gold;
 
 /**
- * 受信ボックス一覧の取得リクエスト。
+ * ゴールド一覧の取得リクエスト。
  * 
  * @author Game Server Services, Inc.
  *
  */
 @SuppressWarnings("serial")
-public class DescribeInboxByOwnerIdRequest extends Gs2BasicRequest<DescribeInboxByOwnerIdRequest> {
+public class DescribeGoldByOwnerIdRequest extends Gs2BasicRequest<DescribeGoldByOwnerIdRequest> {
 
-	public static class Constant extends Gs2Inbox.Constant {
-		public static final String FUNCTION = "DescribeInbox";
+	public static class Constant extends Gs2Gold.Constant {
+		public static final String FUNCTION = "DescribeGold";
 	}
 
 	/** オーナーID */
@@ -47,7 +47,7 @@ public class DescribeInboxByOwnerIdRequest extends Gs2BasicRequest<DescribeInbox
 	 * @param ownerId オーナーID
 	 * @return this
 	 */
-	public DescribeInboxByOwnerIdRequest withOwnerId(String ownerId) {
+	public DescribeGoldByOwnerIdRequest withOwnerId(String ownerId) {
 		setOwnerId(ownerId);
 		return this;
 	}
@@ -76,7 +76,7 @@ public class DescribeInboxByOwnerIdRequest extends Gs2BasicRequest<DescribeInbox
 	 * @param pageToken 取得開始位置トークン
 	 * @return this
 	 */
-	public DescribeInboxByOwnerIdRequest withPageToken(String pageToken) {
+	public DescribeGoldByOwnerIdRequest withPageToken(String pageToken) {
 		setPageToken(pageToken);
 		return this;
 	}
@@ -105,7 +105,7 @@ public class DescribeInboxByOwnerIdRequest extends Gs2BasicRequest<DescribeInbox
 	 * @param count 取得件数
 	 * @return this
 	 */
-	public DescribeInboxByOwnerIdRequest withLimit(Integer limit) {
+	public DescribeGoldByOwnerIdRequest withLimit(Integer limit) {
 		setLimit(limit);
 		return this;
 	}

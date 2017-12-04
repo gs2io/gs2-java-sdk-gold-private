@@ -1,29 +1,29 @@
-package io.gs2.inbox.control;
+package io.gs2.gold.control;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import io.gs2.inbox.model.Message;
+import io.gs2.gold.model.Wallet;
 
 /**
- * メッセージ一覧取得結果。
+ * ウォレット一覧取得結果。
  * 
  * @author Game Server Services, Inc.
  *
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class DescribeAllMessageResult {
+public class DescribeAllWalletResult {
 
-	/** メッセージ一覧 */
-	List<Message> items;
+	/** ウォレット一覧 */
+	List<Wallet> items;
 	/** 次のページを取得するためのトークン */
 	String nextPageToken;
 	
 	/**
-	 * 取得したメッセージ数を取得。
+	 * 取得したウォレット数を取得。
 	 * 
-	 * @return 取得したメッセージ数
+	 * @return 取得したウォレット数
 	 */
 	public Integer getCount() {
 		return items == null ? null : items.size();
@@ -33,27 +33,27 @@ public class DescribeAllMessageResult {
 	public void setCount(Integer count){ }
 	
 	/**
-	 * 取得したメッセージ一覧を取得。
+	 * 取得したウォレット一覧を取得。
 	 * 
-	 * @return メッセージ一覧
+	 * @return ウォレット一覧
 	 */
-	public List<Message> getItems() {
+	public List<Wallet> getItems() {
 		return items;
 	}
 	
 	/**
-	 * メッセージ一覧を設定。
+	 * ウォレット一覧を設定。
 	 * 
-	 * @param items メッセージ一覧
+	 * @param items ウォレット一覧
 	 */
-	public void setItems(List<Message> items) {
+	public void setItems(List<Wallet> items) {
 		this.items = items;
 	}
 	
 	/**
 	 * 次のページを取得するためのトークンを取得。
 	 * 
-	 * {@link DescribeAllMessageRequest} に指定することで、次のページを取得できます。
+	 * {@link DescribeAllWalletRequest} に指定することで、次のページを取得できます。
 	 * 
 	 * @return トークン
 	 */

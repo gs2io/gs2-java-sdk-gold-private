@@ -1,4 +1,4 @@
-package io.gs2.inbox;
+package io.gs2.gold;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,37 +9,37 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
 import io.gs2.Gs2Constant;
-import io.gs2.inbox.control.DescribeAllMessageRequest;
-import io.gs2.inbox.control.DescribeAllMessageResult;
-import io.gs2.inbox.control.DescribeInboxByOwnerIdRequest;
-import io.gs2.inbox.control.DescribeInboxByOwnerIdResult;
+import io.gs2.gold.control.DescribeAllWalletRequest;
+import io.gs2.gold.control.DescribeAllWalletResult;
+import io.gs2.gold.control.DescribeGoldByOwnerIdRequest;
+import io.gs2.gold.control.DescribeGoldByOwnerIdResult;
 import io.gs2.model.IGs2Credential;
 
 /**
- * GS2 Message API クライアント
+ * GS2 Wallet API クライアント
  * 
  * @author Game Server Services, Inc.
  *
  */
-public class Gs2InboxPrivateClient extends Gs2InboxClient {
+public class Gs2GoldPrivateClient extends Gs2GoldClient {
 	
 	/**
 	 * コンストラクタ。
 	 * 
 	 * @param credential 認証情報
 	 */
-	public Gs2InboxPrivateClient(IGs2Credential credential) {
+	public Gs2GoldPrivateClient(IGs2Credential credential) {
 		super(credential);
 	}
 
 	/**
-	 * 特定アカウントの受信ボックス一覧を取得
-	 * 
+	 * 特定アカウントのゴールド一覧を取得
+	 *
 	 * @param request リクエストパラメータ
-	 * @return 受信ボックス一覧
+	 * @return ゴールド一覧
 	 */
-	public DescribeInboxByOwnerIdResult describeInboxByOwnerId(DescribeInboxByOwnerIdRequest request) {
-		String url = Gs2Constant.ENDPOINT_HOST + "/system/" + request.getOwnerId() + "/inbox";
+	public DescribeGoldByOwnerIdResult describeGoldByOwnerId(DescribeGoldByOwnerIdRequest request) {
+		String url = Gs2Constant.ENDPOINT_HOST + "/system/" + request.getOwnerId() + "/gold";
 		List<NameValuePair> queryString = new ArrayList<>();
 		if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
 		if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", request.getPageToken()));
@@ -47,22 +47,22 @@ public class Gs2InboxPrivateClient extends Gs2InboxClient {
 			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
 		}
 		HttpGet get = createHttpGet(
-				url, 
-				credential, 
+				url,
+				credential,
 				ENDPOINT,
-				DescribeInboxByOwnerIdRequest.Constant.MODULE, 
-				DescribeInboxByOwnerIdRequest.Constant.FUNCTION);
-		return doRequest(get, DescribeInboxByOwnerIdResult.class);
+				DescribeGoldByOwnerIdRequest.Constant.MODULE,
+				DescribeGoldByOwnerIdRequest.Constant.FUNCTION);
+		return doRequest(get, DescribeGoldByOwnerIdResult.class);
 	}
 
 	/**
-	 * 受信ボックス内のメッセージ一覧を取得
+	 * ゴールド内のウォレット一覧を取得
 	 * 
 	 * @param request リクエストパラメータ
-	 * @return メッセージ一覧
+	 * @return ウォレット一覧
 	 */
-	public DescribeAllMessageResult describeAllMessage(DescribeAllMessageRequest request) {
-		String url = Gs2Constant.ENDPOINT_HOST + "/system/inbox/" + request.getInboxId() + "/message";
+	public DescribeAllWalletResult describeAllWallet(DescribeAllWalletRequest request) {
+		String url = Gs2Constant.ENDPOINT_HOST + "/system/gold/" + request.getGoldId() + "/wallet";
 		List<NameValuePair> queryString = new ArrayList<>();
 		if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
 		if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", request.getPageToken()));
@@ -73,9 +73,9 @@ public class Gs2InboxPrivateClient extends Gs2InboxClient {
 				url, 
 				credential, 
 				ENDPOINT,
-				DescribeAllMessageRequest.Constant.MODULE, 
-				DescribeAllMessageRequest.Constant.FUNCTION);
-		return doRequest(get, DescribeAllMessageResult.class);
+				DescribeAllWalletRequest.Constant.MODULE,
+				DescribeAllWalletRequest.Constant.FUNCTION);
+		return doRequest(get, DescribeAllWalletResult.class);
 	}
 
 }
