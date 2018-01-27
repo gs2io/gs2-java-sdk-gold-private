@@ -1,0 +1,28 @@
+version: 2
+
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+        environment:
+          CIRCLE_ARTIFACTS: /tmp/test-results
+    steps:
+      - checkout
+      -
+        run:
+          name: SDKリポジトリをチェックアウト
+          command: |
+            SDK_PROJECT_REPONAME=${CIRCLE_PROJECT_REPONAME:0:${#CIRCLE_PROJECT_REPONAME}-8} && git clone -b ${CIRCLE_BRANCH} git@github.com:gs2io/${SDK_PROJECT_REPONAME}.git ~/${SDK_PROJECT_REPONAME}
+      -
+        run:
+          name: テストを実行
+          command: |
+            SDK_PROJECT_REPONAME=${CIRCLE_PROJECT_REPONAME:0:${#CIRCLE_PROJECT_REPONAME}-8} && cd ~/${SDK_PROJECT_REPONAME}/ && mvn install -Dgpg.skip=true && cp -rf ~/${SDK_PROJECT_REPONAME}/target ~/repo/target
+            cd ~/repo/ && mvn integration-test
+      -
+        deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              mvn deploy -Dmaven.test.skip=true
+            fi
