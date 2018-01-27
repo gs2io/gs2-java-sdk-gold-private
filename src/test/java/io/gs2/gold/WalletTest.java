@@ -346,8 +346,6 @@ public class WalletTest extends TestCase {
         }
 	}
 
-	// "null" を空文字列扱いする対応が入ったらコメントアウトを解除
-/*
     @Test
     public void testAddToWalletUserIdNone() {
         {
@@ -452,7 +450,7 @@ public class WalletTest extends TestCase {
             }
         }
     }
-*/
+
     @Test
     public void testAddToWalletValueNone() {
         {

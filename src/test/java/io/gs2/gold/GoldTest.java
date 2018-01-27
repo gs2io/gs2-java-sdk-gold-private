@@ -545,30 +545,27 @@ public class GoldTest extends TestCase {
 			try {
 				client.deleteGold(request);
 				assertTrue(false);
-			} catch (NotFoundException e) {
-				// ok_(emessage.startswith("NotFound:"))
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "gold");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
 			}
 		}
 
-		// TODO: SDK ジェネレータが修正されて、アクセス先の URL が壊れなくなったら戻す
-		/*
 		{
 			DeleteGoldRequest request = new DeleteGoldRequest()
 					.withGoldName("");
 			try {
 				client.deleteGold(request);
 				assertTrue(false);
-			} catch (NotFoundException e) {
-				// ok_(emessage.startswith("NotFound:"))
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "gold");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
 			}
 		}
-		*/
 	}
 
 	@Test
@@ -664,16 +661,14 @@ public class GoldTest extends TestCase {
 			try {
 				client.getGold(request);
 				assertTrue(false);
-			} catch (NotFoundException e) {
-				// ok_(emessage.startswith("NotFound:"))
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "gold");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
 			}
 		}
 
-		// TODO: SDK ジェネレータが修正されて、アクセス先の URL が壊れなくなったら戻す
-		/*
         GetGoldRequest request = new GetGoldRequest()
                 .withGoldName("");
         try {
@@ -685,7 +680,6 @@ public class GoldTest extends TestCase {
 			assertEquals(e.getErrors().get(0).getComponent(), "goldId");
 			assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
 		}
-		*/
 	}
 
     @Test
@@ -717,16 +711,14 @@ public class GoldTest extends TestCase {
 			try {
 				client.updateGold(request);
 				assertTrue(false);
-			} catch (NotFoundException e) {
-				// ok_(emessage.startswith("NotFound:"))
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "gold");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
 			}
 		}
 
-		// TODO: SDK ジェネレータが修正されて、アクセス先の URL が壊れなくなったら戻す
-		/*
 		{
 			UpdateGoldRequest request = new UpdateGoldRequest()
 					.withGoldName("")
@@ -742,7 +734,6 @@ public class GoldTest extends TestCase {
 				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
 			}
 		}
-		*/
 	}
 
     @Test
