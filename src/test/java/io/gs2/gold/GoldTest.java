@@ -1,6 +1,7 @@
 package io.gs2.gold;
 
 import io.gs2.exception.ServiceUnavailableException;
+import io.gs2.gold.control.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,17 +10,6 @@ import org.junit.runners.JUnit4;
 
 import io.gs2.exception.BadRequestException;
 import io.gs2.exception.NotFoundException;
-import io.gs2.gold.control.CreateGoldRequest;
-import io.gs2.gold.control.CreateGoldResult;
-import io.gs2.gold.control.GetGoldStatusRequest;
-import io.gs2.gold.control.GetGoldStatusResult;
-import io.gs2.gold.control.GetGoldRequest;
-import io.gs2.gold.control.GetGoldResult;
-import io.gs2.gold.control.UpdateGoldRequest;
-import io.gs2.gold.control.UpdateGoldResult;
-import io.gs2.gold.control.DescribeGoldRequest;
-import io.gs2.gold.control.DescribeGoldResult;
-import io.gs2.gold.control.DeleteGoldRequest;
 //import io.gs2.gold.control.DeleteGoldResult;
 import io.gs2.gold.model.Gold;
 import io.gs2.model.BasicGs2Credential;
@@ -40,7 +30,7 @@ public class GoldTest extends TestCase {
 	protected static String GOLD_NAME4 = "gold-0004";
 
 	protected static Gs2GoldClient client;
-	// protected static Gs2GoldPrivateClient pclient;
+	protected static Gs2GoldPrivateClient pclient;
 
 	protected static void ensureGoldEmpty() {
 		List<Gold> items;
@@ -108,8 +98,7 @@ public class GoldTest extends TestCase {
 	@BeforeClass
 	public static void startup() {
 		Gs2GoldClient.ENDPOINT = "gold-dev";
-		//client = pclient = new Gs2GoldPrivateClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
-		client = new Gs2GoldClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
+		client = pclient = new Gs2GoldPrivateClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
 	}
 	
 	@Test
@@ -248,17 +237,17 @@ public class GoldTest extends TestCase {
 			} catch (InterruptedException e) { }
 		} while(true);
 
-		/*
 		{
 			DescribeGoldByOwnerIdRequest request = new DescribeGoldByOwnerIdRequest()
 					.withOwnerId(OWNER_ID);
-			DescribeGoldByOwnerIdResult result = client.describeGoldByOwnerId(request);
-			items, next_page_token = result["items"], result["nextPageToken"]
-			eq_(len(items), 2)
-
-			if items[1]["name"] == gold1["name"]:
-			gold1, gold2 = gold2, gold1
-
+			DescribeGoldByOwnerIdResult result = pclient.describeGoldByOwnerId(request);
+			assertNotNull(result.getItems());
+			assertEquals(result.getItems().size(), 2);
+			if (gold2.getGoldId().equals(result.getItems().get(0).getGoldId())) {
+				Gold t = gold1;
+				gold1 = gold2;
+				gold2 = t;
+			}
 			assertEquals(result.getItems().get(0).getOwnerId(), gold1.getOwnerId());
 			assertEquals(result.getItems().get(0).getName(), gold1.getName());
 			assertEquals(result.getItems().get(0).getDescription(), gold1.getDescription());
@@ -269,7 +258,7 @@ public class GoldTest extends TestCase {
 			assertEquals(result.getItems().get(0).getResetHour(), gold1.getResetHour());
 			assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold1.getPeriodicalLimit());
 			assertEquals(result.getItems().get(0).getNotificationUrl(), gold1.getNotificationUrl());
-			ok_(items[0]["createAt"])
+			assertNotNull(result.getItems().get(0).getCreateAt());
 			assertEquals(result.getItems().get(1).getOwnerId(), gold2.getOwnerId());
 			assertEquals(result.getItems().get(1).getName(), gold2.getName());
 			assertEquals(result.getItems().get(1).getDescription(), gold2.getDescription());
@@ -280,10 +269,9 @@ public class GoldTest extends TestCase {
 			assertEquals(result.getItems().get(1).getResetHour(), gold2.getResetHour());
 			assertEquals(result.getItems().get(1).getPeriodicalLimit(), gold2.getPeriodicalLimit());
 			assertEquals(result.getItems().get(1).getNotificationUrl(), gold2.getNotificationUrl());
-			ok_(items[1]["createAt"])
-			assertNull(next_page_token);
+			assertNotNull(result.getItems().get(1).getCreateAt());
+			assertNull(result.getNextPageToken());
 		}
-		*/
 
 		{
 			DescribeGoldRequest request = new DescribeGoldRequest();
@@ -637,18 +625,16 @@ public class GoldTest extends TestCase {
         // DeleteGoldResult result = client.deleteGold(request);
 	}
 
-	/*
 	public void testDescribeGoldByOwnerIdOwnerIdNone() {
-        DescribeGoldRequest request = new DescribeGoldRequest();
-        //                 .withOwnerId(OWNER_ID)
-        DescribeGoldByOwnerIdResult result = client.describeGoldByOwnerId(request);
+		DescribeGoldByOwnerIdRequest request = new DescribeGoldByOwnerIdRequest();
+		//		.withOwnerId(OWNER_ID);
+        DescribeGoldByOwnerIdResult result = pclient.describeGoldByOwnerId(request);
 	    List<Gold> items = result.getItems();
 	    String nextPageToken = result.getNextPageToken();
 
 	    assertNull(nextPageToken);
 	    assertEquals(items.size(), 0);
 	}
-	*/
 
     @Test
     public void testCreateGoldDuplicate() {
