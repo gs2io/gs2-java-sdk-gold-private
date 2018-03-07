@@ -14,13 +14,13 @@
 		<dependency>
 			<groupId>io.gs2</groupId>
 			<artifactId>gs2-java-sdk-auth</artifactId>
-			<version>0.2.0</version>
+			<version>0.5.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.gs2</groupId>
 			<artifactId>gs2-java-sdk-gold</artifactId>
-			<version>0.2.0</version>
+			<version>0.5.1</version>
 		</dependency>
 	</dependencies>
 

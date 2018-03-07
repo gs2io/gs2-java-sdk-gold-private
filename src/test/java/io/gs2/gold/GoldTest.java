@@ -83,11 +83,11 @@ public class GoldTest extends TestCase {
 				.withDescription("Gold 1")
 				.withServiceClass("gold1.nano")
 				.withBalanceMax(2000)
-				.withRestrictionType("weekly")
+				.withResetType("weekly")
 				.withResetDayOfMonth(0)
-				.withResetDayOfWeek("1")
+				.withResetDayOfWeek("tuesday")
 				.withResetHour(17)
-				.withPeriodicalLimit(450)
+				.withLatestGainMax(450)
 				.withNotificationUrl("http://example.com/");
 		try {
 			client.createGold(request);
@@ -113,11 +113,11 @@ public class GoldTest extends TestCase {
 					.withDescription("Gold 1")
 					.withServiceClass("gold1.nano")
 					.withBalanceMax(2000)
-					.withRestrictionType("weekly")
+					.withResetType("weekly")
 					.withResetDayOfMonth(0)
-					.withResetDayOfWeek("1")
+					.withResetDayOfWeek("tuesday")
 					.withResetHour(17)
-					.withPeriodicalLimit(450)
+					.withLatestGainMax(450)
 					.withNotificationUrl("http://example.com/");
 			CreateGoldResult result = client.createGold(request);
 			assertNotNull(result);
@@ -128,10 +128,10 @@ public class GoldTest extends TestCase {
 			assertEquals(gold1.getDescription(), "Gold 1");
 			assertEquals(gold1.getServiceClass(), "gold1.nano");
 			assertEquals(gold1.getBalanceMax(), Integer.valueOf(2000));
-			assertEquals(gold1.getRestrictionType(), "weekly");
-			assertEquals(gold1.getResetDayOfWeek(), "1");		// TODO
+			assertEquals(gold1.getResetType(), "weekly");
+			assertEquals(gold1.getResetDayOfWeek(), "tuesday");
 			assertEquals(gold1.getResetHour(), Integer.valueOf(17));
-			assertEquals(gold1.getPeriodicalLimit(), Integer.valueOf(450));
+			assertEquals(gold1.getLatestGainMax(), Integer.valueOf(450));
 			assertEquals(gold1.getNotificationUrl(), "http://example.com/");
 			assertNotNull(gold1.getCreateAt());
 		}
@@ -161,11 +161,11 @@ public class GoldTest extends TestCase {
 			assertNull(gold2.getDescription());
 			assertEquals(gold2.getServiceClass(), "gold1.nano");
 			assertEquals(gold2.getBalanceMax(), Integer.valueOf(99999999));
-			assertEquals(gold2.getRestrictionType(), "none");
+			assertEquals(gold2.getResetType(), "none");
 			assertNull(gold2.getResetDayOfMonth());
 			assertNull(gold2.getResetDayOfWeek());
 			assertNull(gold2.getResetHour());
-			assertEquals(gold2.getPeriodicalLimit(), Integer.valueOf(99999999));
+			assertEquals(gold2.getLatestGainMax(), Integer.valueOf(99999999));
 			assertNull(gold2.getNotificationUrl());
 			assertNotNull(gold2.getCreateAt());
 		}
@@ -194,10 +194,10 @@ public class GoldTest extends TestCase {
 			assertEquals(gold1.getDescription(), "Gold 1");
 			assertEquals(gold1.getServiceClass(), "gold1.nano");
 			assertEquals(gold1.getBalanceMax(), Integer.valueOf(2000));
-			assertEquals(gold1.getRestrictionType(), "weekly");
-			assertEquals(gold1.getResetDayOfWeek(), "1");		// TODO
+			assertEquals(gold1.getResetType(), "weekly");
+			assertEquals(gold1.getResetDayOfWeek(), "tuesday");
 			assertEquals(gold1.getResetHour(), Integer.valueOf(17));
-			assertEquals(gold1.getPeriodicalLimit(), Integer.valueOf(450));
+			assertEquals(gold1.getLatestGainMax(), Integer.valueOf(450));
 			assertEquals(gold1.getNotificationUrl(), "http://example.com/");
 			assertNotNull(gold1.getCreateAt());
 		}
@@ -206,7 +206,7 @@ public class GoldTest extends TestCase {
 			UpdateGoldRequest request = new UpdateGoldRequest()
 					.withGoldName(GOLD_NAME1)
 					.withServiceClass("gold1.micro")
-					.withRestrictionType("none");
+					.withResetType("none");
 			UpdateGoldResult result = client.updateGold(request);
 			assertNotNull(result);
 			gold1 = result.getItem();
@@ -216,11 +216,11 @@ public class GoldTest extends TestCase {
 			assertNull(gold1.getDescription());
 			assertEquals(gold1.getServiceClass(), "gold1.micro");
 			assertEquals(gold1.getBalanceMax(), Integer.valueOf(99999999));
-			assertEquals(gold1.getRestrictionType(), "none");
+			assertEquals(gold1.getResetType(), "none");
 			assertNull(gold1.getResetDayOfMonth());
 			assertNull(gold1.getResetDayOfWeek());
 			assertNull(gold1.getResetHour());
-			assertEquals(gold1.getPeriodicalLimit(), Integer.valueOf(99999999));
+			assertEquals(gold1.getLatestGainMax(), Integer.valueOf(99999999));
 			assertNull(gold1.getNotificationUrl());
 			assertNotNull(gold1.getCreateAt());
 		}
@@ -253,10 +253,10 @@ public class GoldTest extends TestCase {
 			assertEquals(result.getItems().get(0).getDescription(), gold1.getDescription());
 			assertEquals(result.getItems().get(0).getServiceClass(), gold1.getServiceClass());
 			assertEquals(result.getItems().get(0).getBalanceMax(), gold1.getBalanceMax());
-			assertEquals(result.getItems().get(0).getRestrictionType(), gold1.getRestrictionType());
+			assertEquals(result.getItems().get(0).getResetType(), gold1.getResetType());
 			assertEquals(result.getItems().get(0).getResetDayOfWeek(), gold1.getResetDayOfWeek());
 			assertEquals(result.getItems().get(0).getResetHour(), gold1.getResetHour());
-			assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold1.getPeriodicalLimit());
+			assertEquals(result.getItems().get(0).getLatestGainMax(), gold1.getLatestGainMax());
 			assertEquals(result.getItems().get(0).getNotificationUrl(), gold1.getNotificationUrl());
 			assertNotNull(result.getItems().get(0).getCreateAt());
 			assertEquals(result.getItems().get(1).getOwnerId(), gold2.getOwnerId());
@@ -264,10 +264,10 @@ public class GoldTest extends TestCase {
 			assertEquals(result.getItems().get(1).getDescription(), gold2.getDescription());
 			assertEquals(result.getItems().get(1).getServiceClass(), gold2.getServiceClass());
 			assertEquals(result.getItems().get(1).getBalanceMax(), gold2.getBalanceMax());
-			assertEquals(result.getItems().get(1).getRestrictionType(), gold2.getRestrictionType());
+			assertEquals(result.getItems().get(1).getResetType(), gold2.getResetType());
 			assertEquals(result.getItems().get(1).getResetDayOfWeek(), gold2.getResetDayOfWeek());
 			assertEquals(result.getItems().get(1).getResetHour(), gold2.getResetHour());
-			assertEquals(result.getItems().get(1).getPeriodicalLimit(), gold2.getPeriodicalLimit());
+			assertEquals(result.getItems().get(1).getLatestGainMax(), gold2.getLatestGainMax());
 			assertEquals(result.getItems().get(1).getNotificationUrl(), gold2.getNotificationUrl());
 			assertNotNull(result.getItems().get(1).getCreateAt());
 			assertNull(result.getNextPageToken());
@@ -289,10 +289,10 @@ public class GoldTest extends TestCase {
 			assertEquals(result.getItems().get(0).getDescription(), gold1.getDescription());
 			assertEquals(result.getItems().get(0).getServiceClass(), gold1.getServiceClass());
 			assertEquals(result.getItems().get(0).getBalanceMax(), gold1.getBalanceMax());
-			assertEquals(result.getItems().get(0).getRestrictionType(), gold1.getRestrictionType());
+			assertEquals(result.getItems().get(0).getResetType(), gold1.getResetType());
 			assertEquals(result.getItems().get(0).getResetDayOfWeek(), gold1.getResetDayOfWeek());
 			assertEquals(result.getItems().get(0).getResetHour(), gold1.getResetHour());
-			assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold1.getPeriodicalLimit());
+			assertEquals(result.getItems().get(0).getLatestGainMax(), gold1.getLatestGainMax());
 			assertEquals(result.getItems().get(0).getNotificationUrl(), gold1.getNotificationUrl());
 			assertNotNull(result.getItems().get(0).getCreateAt());
 			assertEquals(result.getItems().get(1).getOwnerId(), gold2.getOwnerId());
@@ -300,10 +300,10 @@ public class GoldTest extends TestCase {
 			assertEquals(result.getItems().get(1).getDescription(), gold2.getDescription());
 			assertEquals(result.getItems().get(1).getServiceClass(), gold2.getServiceClass());
 			assertEquals(result.getItems().get(1).getBalanceMax(), gold2.getBalanceMax());
-			assertEquals(result.getItems().get(1).getRestrictionType(), gold2.getRestrictionType());
+			assertEquals(result.getItems().get(1).getResetType(), gold2.getResetType());
 			assertEquals(result.getItems().get(1).getResetDayOfWeek(), gold2.getResetDayOfWeek());
 			assertEquals(result.getItems().get(1).getResetHour(), gold2.getResetHour());
-			assertEquals(result.getItems().get(1).getPeriodicalLimit(), gold2.getPeriodicalLimit());
+			assertEquals(result.getItems().get(1).getLatestGainMax(), gold2.getLatestGainMax());
 			assertEquals(result.getItems().get(1).getNotificationUrl(), gold2.getNotificationUrl());
 			assertNotNull(result.getItems().get(1).getCreateAt());
 			assertNull(result.getNextPageToken());
@@ -324,10 +324,10 @@ public class GoldTest extends TestCase {
 				assertEquals(result.getItems().get(0).getDescription(), gold1.getDescription());
 				assertEquals(result.getItems().get(0).getServiceClass(), gold1.getServiceClass());
 				assertEquals(result.getItems().get(0).getBalanceMax(), gold1.getBalanceMax());
-				assertEquals(result.getItems().get(0).getRestrictionType(), gold1.getRestrictionType());
+				assertEquals(result.getItems().get(0).getResetType(), gold1.getResetType());
 				assertEquals(result.getItems().get(0).getResetDayOfWeek(), gold1.getResetDayOfWeek());
 				assertEquals(result.getItems().get(0).getResetHour(), gold1.getResetHour());
-				assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold1.getPeriodicalLimit());
+				assertEquals(result.getItems().get(0).getLatestGainMax(), gold1.getLatestGainMax());
 				assertEquals(result.getItems().get(0).getNotificationUrl(), gold1.getNotificationUrl());
 				assertNotNull(result.getItems().get(0).getCreateAt());
 				assertNotNull(result.getNextPageToken());
@@ -347,10 +347,10 @@ public class GoldTest extends TestCase {
 				assertEquals(result.getItems().get(0).getDescription(), gold2.getDescription());
 				assertEquals(result.getItems().get(0).getServiceClass(), gold2.getServiceClass());
 				assertEquals(result.getItems().get(0).getBalanceMax(), gold2.getBalanceMax());
-				assertEquals(result.getItems().get(0).getRestrictionType(), gold2.getRestrictionType());
+				assertEquals(result.getItems().get(0).getResetType(), gold2.getResetType());
 				assertEquals(result.getItems().get(0).getResetDayOfWeek(), gold2.getResetDayOfWeek());
 				assertEquals(result.getItems().get(0).getResetHour(), gold2.getResetHour());
-				assertEquals(result.getItems().get(0).getPeriodicalLimit(), gold2.getPeriodicalLimit());
+				assertEquals(result.getItems().get(0).getLatestGainMax(), gold2.getLatestGainMax());
 				assertEquals(result.getItems().get(0).getNotificationUrl(), gold2.getNotificationUrl());
 				assertNotNull(result.getItems().get(0).getCreateAt());
 				assertNull(result.getNextPageToken());
@@ -411,7 +411,7 @@ public class GoldTest extends TestCase {
 			CreateGoldRequest request = new CreateGoldRequest()
 					//         .withName(GOLD_NAME1)
 					.withServiceClass("gold1.nano")
-					.withRestrictionType("none");
+					.withResetType("none");
 			try {
 				client.createGold(request);
 				assertTrue(false);
@@ -427,7 +427,7 @@ public class GoldTest extends TestCase {
 			CreateGoldRequest request = new CreateGoldRequest()
 					.withName("")
 					.withServiceClass("gold1.nano")
-					.withRestrictionType("none");
+					.withResetType("none");
 			try {
 				client.createGold(request);
 				assertTrue(false);
@@ -447,7 +447,7 @@ public class GoldTest extends TestCase {
 		CreateGoldRequest request = new CreateGoldRequest()
                 .withName("#")
                 .withServiceClass("gold1.nano")
-                .withRestrictionType("none");
+                .withResetType("none");
         try {
             client.createGold(request);
             assertTrue(false);
@@ -467,7 +467,7 @@ public class GoldTest extends TestCase {
 			CreateGoldRequest request = new CreateGoldRequest()
 					.withName(GOLD_NAME1)
 					//                 .withServiceClass("gold1.nano")
-					.withRestrictionType("none");
+					.withResetType("none");
 			try {
 				client.createGold(request);
 				assertTrue(false);
@@ -483,7 +483,7 @@ public class GoldTest extends TestCase {
 			CreateGoldRequest request = new CreateGoldRequest()
 					.withName(GOLD_NAME1)
 					.withServiceClass("")
-					.withRestrictionType("none");
+					.withResetType("none");
 			try {
 				client.createGold(request);
 				assertTrue(false);
@@ -503,7 +503,7 @@ public class GoldTest extends TestCase {
 		CreateGoldRequest request = new CreateGoldRequest()
                 .withName(GOLD_NAME1)
                 .withServiceClass("invalid")
-                .withRestrictionType("none");
+                .withResetType("none");
         try {
             client.createGold(request);
             assertTrue(false);
@@ -522,7 +522,7 @@ public class GoldTest extends TestCase {
 		CreateGoldRequest request = new CreateGoldRequest()
                 .withName(GOLD_NAME1)
                 .withServiceClass("gold1.nano")
-                .withRestrictionType("none")
+                .withResetType("none")
                 .withNotificationUrl("invalid");
         try {
             client.createGold(request);
@@ -592,7 +592,7 @@ public class GoldTest extends TestCase {
 			CreateGoldRequest request = new CreateGoldRequest()
 					.withName(GOLD_NAME3)
 					.withServiceClass("gold1.nano")
-					.withRestrictionType("none");
+					.withResetType("none");
 			client.createGold(request);
 		}
 
