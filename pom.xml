@@ -24,6 +24,10 @@
 		</dependency>
 	</dependencies>
 
+	<name>Game Server Services GS2-Gold Private SDK for Java</name>
+	<url>https://gs2.io/</url>
+	<description>Game Server Services GS2-Gold Private SDK for Java</description>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
