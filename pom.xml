@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.gs2</groupId>
 	<artifactId>gs2-java-sdk-gold-private</artifactId>
-	<version>0.2.0</version>
+	<version>0.5.1</version>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -13,14 +13,25 @@
 		</dependency>
 		<dependency>
 			<groupId>io.gs2</groupId>
+			<artifactId>gs2-java-sdk-auth</artifactId>
+			<version>0.5.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.gs2</groupId>
 			<artifactId>gs2-java-sdk-gold</artifactId>
-			<version>0.2.0</version>
+			<version>0.5.1</version>
 		</dependency>
 	</dependencies>
+
+	<name>Game Server Services GS2-Gold Private SDK for Java</name>
+	<url>https://gs2.io/</url>
+	<description>Game Server Services GS2-Gold Private SDK for Java</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<gpg.skip>true</gpg.skip>
 	</properties>
 
 	<build>
