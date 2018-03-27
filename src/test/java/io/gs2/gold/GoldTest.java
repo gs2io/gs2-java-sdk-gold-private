@@ -621,6 +621,7 @@ public class GoldTest extends TestCase {
 		DeleteGoldRequest request = new DeleteGoldRequest()
 				.withGoldName(GOLD_NAME3);
 		// DeleteGoldResult result = client.deleteGold(request);
+		client.deleteGold(request);
 	}
 
 	public void testDescribeGoldByOwnerIdOwnerIdNone() {
