@@ -624,6 +624,7 @@ public class GoldTest extends TestCase {
 		client.deleteGold(request);
 	}
 
+	@Test
 	public void testDescribeGoldByOwnerIdOwnerIdNone() {
 		DescribeGoldByOwnerIdRequest request = new DescribeGoldByOwnerIdRequest();
 		//		.withOwnerId(OWNER_ID);
