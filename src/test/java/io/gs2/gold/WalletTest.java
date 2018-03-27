@@ -108,11 +108,6 @@ public class WalletTest extends TestCase {
 			gold = result.getItem();
 		}
 
-		{
-			GetGoldStatusRequest request = new GetGoldStatusRequest()
-					.withGoldName(GOLD_NAME1);
-		}
-
 		do {
 			GetGoldStatusRequest request = new GetGoldStatusRequest()
 					.withGoldName(GOLD_NAME1);
@@ -123,11 +118,6 @@ public class WalletTest extends TestCase {
 				Thread.sleep(1000 * 1);
 			} catch (InterruptedException e) { }
 		} while(true);
-
-		{
-			GetGoldStatusRequest request = new GetGoldStatusRequest()
-					.withGoldName(GOLD_NAME2);
-		}
 
 		do {
 			GetGoldStatusRequest request = new GetGoldStatusRequest()
@@ -169,11 +159,11 @@ public class WalletTest extends TestCase {
 
 		// 残高を加算
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID)
 					.withValue(100);
-			AddToWalletResult result = client.addToWallet(request);
+			DepositIntoWalletResult result = client.depositIntoWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
@@ -216,11 +206,11 @@ public class WalletTest extends TestCase {
 
 		// 残高を減算
 		{
-			SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID)
 					.withValue(60);
-			SubtractFromWalletResult result = client.subtractFromWallet(request);
+			WithdrawFromWalletResult result = client.withdrawFromWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
@@ -232,12 +222,12 @@ public class WalletTest extends TestCase {
 
 		// 残高がないところに残高を減算
 		{
-			SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID2)
 					.withValue(60);
 			try {
-				client.subtractFromWallet(request);   // ウォレットがなければ残高も 0 なので、残高不足エラーになる
+				client.withdrawFromWallet(request);   // ウォレットがなければ残高も 0 なので、残高不足エラーになる
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -249,11 +239,11 @@ public class WalletTest extends TestCase {
 
 		// 残高を加算して、ウォレットがあることを保証
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID2)
 					.withValue(50);
-			AddToWalletResult result = client.addToWallet(request);
+			DepositIntoWalletResult result = client.depositIntoWallet(request);
 			assertNotNull(result);
 			wallet2 = result.getItem();
 			assertEquals(wallet2.getUserId(), USER_ID2);
@@ -347,14 +337,14 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testAddToWalletUserIdNone() {
+	public void testDepositIntoWalletUserIdNone() {
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					//                 .withUserId(USER_ID)
 					.withValue(0);
 			try {
-				client.addToWallet(request);
+				client.depositIntoWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -365,12 +355,12 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId("")
 					.withValue(0);
 			try {
-				client.addToWallet(request);
+				client.depositIntoWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -382,14 +372,14 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testSubtractFromWalletUserIdNone() {
+	public void testWithdrawFromWalletUserIdNone() {
 		{
-			SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					//                 .withUserId(USER_ID)
 					.withValue(0);
 			try {
-				client.subtractFromWallet(request);
+				client.withdrawFromWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -400,12 +390,12 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId("")
 					.withValue(0);
 			try {
-				client.subtractFromWallet(request);
+				client.withdrawFromWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -452,14 +442,14 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testAddToWalletValueNone() {
+	public void testDepositIntoWalletValueNone() {
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID);
 			//         .withValue(0)
 			try {
-				client.addToWallet(request);
+				client.depositIntoWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -470,12 +460,12 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID)
 					.withValue(null);
 			try {
-				client.addToWallet(request);
+				client.depositIntoWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -487,14 +477,14 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testAddToMyWalletValueNone() {
+	public void testDepositIntoMyWalletValueNone() {
 		{
-			AddToMyWalletRequest request = new AddToMyWalletRequest()
+			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					//         .withValue(0)
 					.withAccessToken(accessToken);
 			try {
-				client.addToMyWallet(request);
+				client.depositIntoMyWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -505,12 +495,12 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			AddToMyWalletRequest request = new AddToMyWalletRequest()
+			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withValue(null)
 					.withAccessToken(accessToken);
 			try {
-				client.addToMyWallet(request);
+				client.depositIntoMyWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -522,14 +512,14 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testSubtractFromWalletValueNone() {
+	public void testWithdrawFromWalletValueNone() {
 		{
-			SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID);
 			//         .withValue(0)
 			try {
-				client.subtractFromWallet(request);
+				client.withdrawFromWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -540,12 +530,12 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID)
 					.withValue(null);
 			try {
-				client.subtractFromWallet(request);
+				client.withdrawFromWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -557,14 +547,14 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testSubtractFromMyWalletValueNone() {
+	public void testWithdrawFromMyWalletValueNone() {
 		{
-			SubtractFromMyWalletRequest request = new SubtractFromMyWalletRequest()
+			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					//         .withValue(0)
 					.withAccessToken(accessToken);
 			try {
-				client.subtractFromMyWallet(request);
+				client.withdrawFromMyWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -575,12 +565,12 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			SubtractFromMyWalletRequest request = new SubtractFromMyWalletRequest()
+			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withValue(null)
 					.withAccessToken(accessToken);
 			try {
-				client.subtractFromMyWallet(request);
+				client.withdrawFromMyWallet(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -592,13 +582,13 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testAddToWalletValueNegative() {
-		AddToWalletRequest request = new AddToWalletRequest()
+	public void testDepositIntoWalletValueNegative() {
+		DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 				.withGoldName(GOLD_NAME1)
 				.withUserId(USER_ID)
 				.withValue(-100);
 		try {
-			client.addToWallet(request);
+			client.depositIntoWallet(request);
 			assertTrue(false);
 		} catch (BadRequestException e) {
 			// ok_(emessage.startswith("BadRequest:"))
@@ -609,13 +599,13 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testAddToMyWalletValueNegative() {
-		AddToMyWalletRequest request = new AddToMyWalletRequest()
+	public void testDepositIntoMyWalletValueNegative() {
+		DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 				.withGoldName(GOLD_NAME1)
 				.withValue(-100)
 				.withAccessToken(accessToken);
 		try {
-			client.addToMyWallet(request);
+			client.depositIntoMyWallet(request);
 			assertTrue(false);
 		} catch (BadRequestException e) {
 			// ok_(emessage.startswith("BadRequest:"))
@@ -626,13 +616,13 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testSubtractFromWalletValueNegative() {
-		SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+	public void testWithdrawFromWalletValueNegative() {
+		WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 				.withGoldName(GOLD_NAME1)
 				.withUserId(USER_ID)
 				.withValue(-100);
 		try {
-			client.subtractFromWallet(request);
+			client.withdrawFromWallet(request);
 			assertTrue(false);
 		} catch (BadRequestException e) {
 			// ok_(emessage.startswith("BadRequest:"))
@@ -643,13 +633,13 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testSubtractFromMyWalletValueNegative() {
-		SubtractFromMyWalletRequest request = new SubtractFromMyWalletRequest()
+	public void testWithdrawFromMyWalletValueNegative() {
+		WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 				.withGoldName(GOLD_NAME1)
 				.withValue(-100)
 				.withAccessToken(accessToken);
 		try {
-			client.subtractFromMyWallet(request);
+			client.withdrawFromMyWallet(request);
 			assertTrue(false);
 		} catch (BadRequestException e) {
 			// ok_(emessage.startswith("BadRequest:"))
@@ -677,7 +667,7 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testAddToWalletGoldNotActive() {
+	public void testDepositIntoWalletGoldNotActive() {
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
 					.withName(GOLD_NAME4)
@@ -686,12 +676,12 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME4)
 					.withUserId(USER_ID)
 					.withValue(0);
 			try {
-				client.addToWallet(request);
+				client.depositIntoWallet(request);
 				assertTrue(false);
 			} catch (NotFoundException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -726,11 +716,11 @@ public class WalletTest extends TestCase {
 	@Test
 	public void testSuccessfulNotifications() {
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME2)
 					.withUserId(USER_ID)
 					.withValue(100);
-			AddToWalletResult result = client.addToWallet(request);
+			DepositIntoWalletResult result = client.depositIntoWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
@@ -741,11 +731,11 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME2)
 					.withUserId(USER_ID)
 					.withValue(60);
-			SubtractFromWalletResult result = client.subtractFromWallet(request);
+			WithdrawFromWalletResult result = client.withdrawFromWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
@@ -760,19 +750,19 @@ public class WalletTest extends TestCase {
 	public void testFailedNotifications() {
 		// 通知先から失敗応答を受ける加算
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME3)
 					.withUserId(USER_ID)
 					.withValue(100)
 					.withContext("failure");
 			try {
-				client.addToWallet(request);
+				client.depositIntoWallet(request);
 				assertTrue(false);
 			} catch (BadGatewayException e) {
 				// ok_(emessage.startswith("BadGateway:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "Wallet");
-				assertEquals(e.getErrors().get(0).getMessage(), "Wallet.AddToWallet.error.invokeError");
+				assertEquals(e.getErrors().get(0).getMessage(), "Wallet.DepositIntoWallet.error.invokeError");
 			}
 		}
 
@@ -793,19 +783,19 @@ public class WalletTest extends TestCase {
 
 		// 通知先から失敗応答を受ける加算
 		{
-			AddToMyWalletRequest request = new AddToMyWalletRequest()
+			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 					.withGoldName(GOLD_NAME3)
 					.withValue(100)
 					.withContext("failure")
 					.withAccessToken(accessToken);
 			try {
-				client.addToMyWallet(request);
+				client.depositIntoMyWallet(request);
 				assertTrue(false);
 			} catch (BadGatewayException e) {
 				// ok_(emessage.startswith("BadGateway:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "Wallet");
-				assertEquals(e.getErrors().get(0).getMessage(), "Wallet.AddToMyWallet.error.invokeError");
+				assertEquals(e.getErrors().get(0).getMessage(), "Wallet.DepositIntoMyWallet.error.invokeError");
 			}
 		}
 
@@ -826,12 +816,12 @@ public class WalletTest extends TestCase {
 
 		// 次の減算のテストのために成功する加算
 		{
-			AddToWalletRequest request = new AddToWalletRequest()
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME3)
 					.withUserId(USER_ID)
 					.withValue(100)
 					.withContext("success");   // "failure" 以外なら何でもよい
-			AddToWalletResult result = client.addToWallet(request);
+			DepositIntoWalletResult result = client.depositIntoWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
@@ -843,20 +833,20 @@ public class WalletTest extends TestCase {
 
 		// 通知先から失敗応答を受ける減算
 		{
-			SubtractFromWalletRequest request = new SubtractFromWalletRequest()
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME3)
 					.withUserId(USER_ID)
 					.withValue(60)
 					.withContext("failure");
 			try {
-				SubtractFromWalletResult result = client.subtractFromWallet(request);
+				WithdrawFromWalletResult result = client.withdrawFromWallet(request);
 				assertNotNull(result);
 				wallet1 = result.getItem();
 			} catch (BadGatewayException e) {
 				// ok_(emessage.startswith("BadGateway:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "Wallet");
-				assertEquals(e.getErrors().get(0).getMessage(), "Wallet.SubtractFromWallet.error.invokeError");
+				assertEquals(e.getErrors().get(0).getMessage(), "Wallet.WithdrawFromWallet.error.invokeError");
 			}
 		}
 		// 通知が失敗した場合、減算は行われない
@@ -876,20 +866,20 @@ public class WalletTest extends TestCase {
 
 		// 通知先から失敗応答を受ける減算
 		{
-			SubtractFromMyWalletRequest request = new SubtractFromMyWalletRequest()
+			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 					.withGoldName(GOLD_NAME3)
 					.withValue(60)
 					.withContext("failure")
 					.withAccessToken(accessToken);
 			try {
-				SubtractFromMyWalletResult result = client.subtractFromMyWallet(request);
+				WithdrawFromMyWalletResult result = client.withdrawFromMyWallet(request);
 				assertNotNull(result);
 				wallet1 = result.getItem();
 			} catch (BadGatewayException e) {
 				// ok_(emessage.startswith("BadGateway:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "Wallet");
-				assertEquals(e.getErrors().get(0).getMessage(), "Wallet.SubtractFromMyWallet.error.invokeError");
+				assertEquals(e.getErrors().get(0).getMessage(), "Wallet.WithdrawFromMyWallet.error.invokeError");
 			}
 		}
 
