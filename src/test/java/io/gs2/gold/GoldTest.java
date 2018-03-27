@@ -588,6 +588,7 @@ public class GoldTest extends TestCase {
 	@Test
 	public void testDeleteGoldGoldNotActive() {
 		// 専用の GOLD_NAME3 しか操作しないので前提条件不要
+
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
 					.withName(GOLD_NAME3)
@@ -669,16 +670,18 @@ public class GoldTest extends TestCase {
 			}
 		}
 
-		GetGoldRequest request = new GetGoldRequest()
-				.withGoldName("");
-		try {
-			client.getGold(request);
-			assertTrue(false);
-		} catch (BadRequestException e) {
-			// ok_(emessage.startswith("BadRequest:"))
-			assertEquals(e.getErrors().size(), 1);
-			assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+		{
+			GetGoldRequest request = new GetGoldRequest()
+					.withGoldName("");
+			try {
+				client.getGold(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
 		}
 	}
 
