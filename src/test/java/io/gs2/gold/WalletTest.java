@@ -157,13 +157,45 @@ public class WalletTest extends TestCase {
 			assertNotNull(wallet1.getUpdateAt());
 		}
 
+		// あってもなくても Get できる
+		{
+			GetMyWalletRequest request = new GetMyWalletRequest()
+					.withGoldName(gold.getName())
+					.withAccessToken(accessToken);
+			GetMyWalletResult result = client.getMyWallet(request);
+			assertNotNull(result);
+			wallet1 = result.getItem();
+			// assertEquals(wallet1.getGoldId(), gold.getGoldId());
+			assertEquals(wallet1.getUserId(), USER_ID);
+			assertEquals(wallet1.getBalance(), Integer.valueOf(0));
+			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertNotNull(wallet1.getCreateAt());
+			assertNotNull(wallet1.getUpdateAt());
+		}
+
 		// 残高を加算
 		{
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID)
-					.withValue(100);
+					.withValue(40);
 			DepositIntoWalletResult result = client.depositIntoWallet(request);
+			assertNotNull(result);
+			wallet1 = result.getItem();
+			assertEquals(wallet1.getUserId(), USER_ID);
+			assertEquals(wallet1.getBalance(), Integer.valueOf(40));
+			assertEquals(wallet1.getLatestGain(), Integer.valueOf(40));
+			assertNotNull(wallet1.getCreateAt());
+			assertNotNull(wallet1.getUpdateAt());
+		}
+
+		// 残高を加算
+		{
+			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
+					.withGoldName(gold.getName())
+					.withValue(60)
+					.withAccessToken(accessToken);
+			DepositIntoMyWalletResult result = client.depositIntoMyWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
@@ -209,8 +241,24 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID)
-					.withValue(60);
+					.withValue(40);
 			WithdrawFromWalletResult result = client.withdrawFromWallet(request);
+			assertNotNull(result);
+			wallet1 = result.getItem();
+			assertEquals(wallet1.getUserId(), USER_ID);
+			assertEquals(wallet1.getBalance(), Integer.valueOf(60));
+			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertNotNull(wallet1.getCreateAt());
+			assertNotNull(wallet1.getUpdateAt());
+		}
+
+		// 残高を減算
+		{
+			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
+					.withGoldName(gold.getName())
+					.withValue(20)
+					.withAccessToken(accessToken);
+			WithdrawFromMyWalletResult result = client.withdrawFromMyWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
