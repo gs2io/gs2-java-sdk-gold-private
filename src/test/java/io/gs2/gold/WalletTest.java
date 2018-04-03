@@ -385,6 +385,281 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
+	public void testGetWalletGoldNameNone() {
+		{
+			GetWalletRequest request = new GetWalletRequest()
+					// .withGoldName(GOLD_NAME1)
+					.withUserId(USER_ID);
+			try {
+				client.getWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+
+		{
+			GetWalletRequest request = new GetWalletRequest()
+					.withGoldName("")
+					.withUserId(USER_ID);
+			try {
+				client.getWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+	}
+
+	@Test
+	public void testGetMyWalletGoldNameNone() {
+		{
+			GetMyWalletRequest request = new GetMyWalletRequest()
+					// .withGoldName(GOLD_NAME1)
+					.withAccessToken(accessToken);
+			try {
+				client.getMyWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+
+		{
+			GetMyWalletRequest request = new GetMyWalletRequest()
+					.withGoldName("")
+					.withAccessToken(accessToken);
+			try {
+				client.getMyWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+	}
+
+	@Test
+	public void testDepositIntoWalletGoldNameNone() {
+		{
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
+					// .withGoldName(GOLD_NAME1)
+					.withUserId(USER_ID)
+					.withValue(0);
+			try {
+				client.depositIntoWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+
+		{
+			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
+					.withGoldName("")
+					.withUserId(USER_ID)
+					.withValue(0);
+			try {
+				client.depositIntoWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+	}
+
+	@Test
+	public void testDepositIntoMyWalletGoldNameNone() {
+		{
+			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
+					// .withGoldName(GOLD_NAME1)
+					.withValue(0)
+					.withAccessToken(accessToken);
+			try {
+				client.depositIntoMyWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+
+		{
+			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
+					.withGoldName("")
+					.withValue(0)
+					.withAccessToken(accessToken);
+			try {
+				client.depositIntoMyWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+	}
+
+	@Test
+	public void testWithdrawFromWalletGoldNameNone() {
+		{
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
+					// .withGoldName(GOLD_NAME1)
+					.withUserId(USER_ID)
+					.withValue(0);
+			try {
+				client.withdrawFromWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+
+		{
+			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
+					.withGoldName("")
+					.withUserId(USER_ID)
+					.withValue(0);
+			try {
+				client.withdrawFromWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+	}
+
+	@Test
+	public void testWithdrawFromMyWalletGoldNameNone() {
+		{
+			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
+					// .withGoldName(GOLD_NAME1)
+					.withValue(0)
+					.withAccessToken(accessToken);
+			try {
+				client.withdrawFromMyWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+
+		{
+			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
+					.withGoldName("")
+					.withValue(0)
+					.withAccessToken(accessToken);
+			try {
+				client.withdrawFromMyWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+	}
+
+	@Test
+	public void testResetLatestGainGoldNameNone() {
+		{
+			ResetLatestGainRequest request = new ResetLatestGainRequest()
+					// .withGoldName(GOLD_NAME1)
+					.withUserId(USER_ID)
+					.withValue(0);
+			try {
+				client.resetLatestGain(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+
+		{
+			ResetLatestGainRequest request = new ResetLatestGainRequest()
+					.withGoldName("")
+					.withUserId(USER_ID)
+					.withValue(0);
+			try {
+				client.resetLatestGain(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+	}
+
+	@Test
+	public void testGetWalletUserIdNone() {
+		{
+			GetWalletRequest request = new GetWalletRequest()
+					.withGoldName(GOLD_NAME1)
+					//                 .withUserId(USER_ID)
+					;
+			try {
+				client.getWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "userId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.userId.error.require");
+			}
+		}
+
+		{
+			GetWalletRequest request = new GetWalletRequest()
+					.withGoldName(GOLD_NAME1)
+					.withUserId("");
+			try {
+				client.getWallet(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "userId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.userId.error.require");
+			}
+		}
+	}
+
+	@Test
 	public void testDepositIntoWalletUserIdNone() {
 		{
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
