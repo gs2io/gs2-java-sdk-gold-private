@@ -10,8 +10,8 @@ import org.junit.runners.JUnit4;
 
 import io.gs2.exception.BadRequestException;
 import io.gs2.exception.NotFoundException;
-//import io.gs2.gold.control.DeleteGoldResult;
 import io.gs2.gold.model.Gold;
+import io.gs2.gold.model.WalletSettings;
 import io.gs2.model.BasicGs2Credential;
 import junit.framework.TestCase;
 
@@ -200,6 +200,21 @@ public class GoldTest extends TestCase {
 			assertEquals(gold1.getLatestGainMax(), Integer.valueOf(450));
 			assertEquals(gold1.getNotificationUrl(), "http://example.com/");
 			assertNotNull(gold1.getCreateAt());
+		}
+
+		{
+			GetWalletSettingsRequest request = new GetWalletSettingsRequest()
+					.withGoldName(GOLD_NAME1);
+			GetWalletSettingsResult result = client.getWalletSettings(request);
+			assertNotNull(result);
+			WalletSettings walletSettings1 = result.getItem();
+			assertNotNull(walletSettings1);
+			assertEquals(walletSettings1.getBalanceMax(), Integer.valueOf(2000));
+			assertEquals(walletSettings1.getResetType(), "weekly");
+			assertEquals(walletSettings1.getResetDayOfWeek(), "tuesday");
+			assertEquals(walletSettings1.getResetHour(), Integer.valueOf(17));
+			assertEquals(walletSettings1.getLatestGainMax(), Integer.valueOf(450));
+			assertNotNull(walletSettings1.getCreateAt());
 		}
 
 		{
@@ -695,6 +710,56 @@ public class GoldTest extends TestCase {
 				.withGoldName("invalid");
 		try {
 			client.getGold(request);
+			assertTrue(false);
+		} catch (NotFoundException e) {
+			// ok_(emessage.startswith("NotFound:"))
+			assertEquals(e.getErrors().size(), 1);
+			assertEquals(e.getErrors().get(0).getComponent(), "gold");
+			assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
+		}
+	}
+
+	@Test
+	public void testGetWalletSettingsGoldNameNone() {
+		ensureGoldExists();
+
+		{
+			GetWalletSettingsRequest request = new GetWalletSettingsRequest();
+			//                 .withGoldName(GOLD_NAME1)
+			try {
+				client.getWalletSettings(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+
+		{
+			GetWalletSettingsRequest request = new GetWalletSettingsRequest()
+					.withGoldName("");
+			try {
+				client.getWalletSettings(request);
+				assertTrue(false);
+			} catch (BadRequestException e) {
+				// ok_(emessage.startswith("BadRequest:"))
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+			}
+		}
+	}
+
+	@Test
+	public void testGetWalletSettingsGoldNameInvalid() {
+		ensureGoldExists();
+
+		GetWalletSettingsRequest request = new GetWalletSettingsRequest()
+				.withGoldName("invalid");
+		try {
+			client.getWalletSettings(request);
 			assertTrue(false);
 		} catch (NotFoundException e) {
 			// ok_(emessage.startswith("NotFound:"))
