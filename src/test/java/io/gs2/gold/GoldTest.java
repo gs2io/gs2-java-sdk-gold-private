@@ -78,21 +78,38 @@ public class GoldTest extends TestCase {
 	}
 
 	protected static void ensureGoldExists() {
-		CreateGoldRequest request = new CreateGoldRequest()
-				.withName(GOLD_NAME1)
-				.withDescription("Gold 1")
-				.withServiceClass("gold1.nano")
-				.withBalanceMax(2000)
-				.withResetType("weekly")
-				.withResetDayOfMonth(1)				// 無視される
-				.withResetDayOfWeek("tuesday")
-				.withResetHour(17)
-				.withLatestGainMax(450)
-				.withNotificationUrl("http://example.com/");
-		try {
-			client.createGold(request);
-		} catch (BadRequestException e) {
+		{
+			CreateGoldRequest request = new CreateGoldRequest()
+					.withName(GOLD_NAME1)
+					.withDescription("Gold 1")
+					.withServiceClass("gold1.nano")
+					.withBalanceMax(2000)
+					.withResetType("weekly")
+					.withResetDayOfMonth(1)                // 無視される
+					.withResetDayOfWeek("tuesday")
+					.withResetHour(17)
+					.withLatestGainMax(450)
+					.withNotificationUrl("http://example.com/");
+			try {
+				client.createGold(request);
+			} catch (BadRequestException e) {
+				assertEquals(e.getErrors().size(), 1);
+				assertEquals(e.getErrors().get(0).getComponent(), "name");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.name.error.duplicate");
+			}
 		}
+
+		do {
+			GetGoldStatusRequest request = new GetGoldStatusRequest()
+					.withGoldName(GOLD_NAME1);
+			GetGoldStatusResult result = client.getGoldStatus(request);
+			String status = result.getStatus();
+			if (status.equals("ACTIVE")) break;
+			assertNotSame(status, "DELETED");
+			try {
+				Thread.sleep(1000 * 3);
+			} catch (InterruptedException e) { }
+		} while(true);
 	}
 
 	@BeforeClass
