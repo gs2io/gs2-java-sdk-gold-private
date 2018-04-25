@@ -65,7 +65,7 @@ public class WalletTest extends TestCase {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "name");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.name.error.duplicate");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.name.error.duplicate");
 			}
 		}
 
@@ -81,7 +81,7 @@ public class WalletTest extends TestCase {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "name");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.name.error.duplicate");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.name.error.duplicate");
 			}
 		}
 
@@ -97,7 +97,7 @@ public class WalletTest extends TestCase {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "name");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.name.error.duplicate");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.name.error.duplicate");
 			}
 		}
 
@@ -396,8 +396,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 
@@ -411,8 +411,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 	}
@@ -429,8 +429,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 
@@ -444,8 +444,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 	}
@@ -463,8 +463,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 
@@ -479,8 +479,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 	}
@@ -498,8 +498,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 
@@ -514,8 +514,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 	}
@@ -533,8 +533,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 
@@ -549,8 +549,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 	}
@@ -568,8 +568,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 
@@ -584,8 +584,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 	}
@@ -603,8 +603,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.goldName.error.require");
 			}
 		}
 
@@ -619,8 +619,8 @@ public class WalletTest extends TestCase {
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldId");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.goldId.error.require");
+				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.goldName.error.require");
 			}
 		}
 	}
@@ -917,7 +917,7 @@ public class WalletTest extends TestCase {
 			// ok_(emessage.startswith("BadRequest:"))
 			assertEquals(e.getErrors().size(), 1);
 			assertEquals(e.getErrors().get(0).getComponent(), "value");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.require");
+			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.invalid");
 		}
 	}
 
@@ -934,7 +934,7 @@ public class WalletTest extends TestCase {
 			// ok_(emessage.startswith("BadRequest:"))
 			assertEquals(e.getErrors().size(), 1);
 			assertEquals(e.getErrors().get(0).getComponent(), "value");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.require");
+			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.invalid");
 		}
 	}
 
@@ -951,7 +951,7 @@ public class WalletTest extends TestCase {
 			// ok_(emessage.startswith("BadRequest:"))
 			assertEquals(e.getErrors().size(), 1);
 			assertEquals(e.getErrors().get(0).getComponent(), "value");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.require");
+			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.invalid");
 		}
 	}
 
@@ -968,7 +968,7 @@ public class WalletTest extends TestCase {
 			// ok_(emessage.startswith("BadRequest:"))
 			assertEquals(e.getErrors().size(), 1);
 			assertEquals(e.getErrors().get(0).getComponent(), "value");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.require");
+			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.invalid");
 		}
 	}
 
@@ -1010,7 +1010,7 @@ public class WalletTest extends TestCase {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "gold");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.gold.error.notFound");
 			}
 		}
 

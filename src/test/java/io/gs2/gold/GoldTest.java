@@ -114,7 +114,7 @@ public class GoldTest extends TestCase {
 					.withServiceClass("gold1.nano")
 					.withBalanceMax(2000)
 					.withResetType("weekly")
-					.withResetDayOfMonth(0)
+					.withResetDayOfMonth(1)				// 無視される
 					.withResetDayOfWeek("tuesday")
 					.withResetHour(17)
 					.withLatestGainMax(450)
