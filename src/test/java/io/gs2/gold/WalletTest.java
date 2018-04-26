@@ -31,10 +31,10 @@ public class WalletTest extends TestCase {
 	protected static final String CLIENT_ID = "HovFAxYEvg0UMdUue740EQ==";
 	protected static final String CLIENT_SECRET = "mHczQCWbukiCLd9ldCDRBw==";
 	public static final String OWNER_ID = "7dWCSa0w";
-	protected static final String GOLD_NAME1 = "gold-0001";
-	protected static final String GOLD_NAME2 = "gold-0002";
-	protected static final String GOLD_NAME3 = "gold-0003";
-	protected static final String GOLD_NAME4 = "gold-0004";
+	protected static final String GOLD_NAME1 = "gold-2001";
+	protected static final String GOLD_NAME2 = "gold-2002";
+	protected static final String GOLD_NAME3 = "gold-2003";
+	protected static final String GOLD_NAME4 = "gold-2004";
 	protected static String SERVICE_ID = "service-0001";
 	protected static String USER_ID = "user-0001";
 	protected static String USER_ID2 = "user-0002";
@@ -50,8 +50,7 @@ public class WalletTest extends TestCase {
 	@BeforeClass
 	public static void startup() {
 		String region = "ap-northeast-1";
-		Gs2AuthClient.ENDPOINT = "auth-dev";
-		Gs2GoldClient.ENDPOINT = "gold-dev";
+		Initializer.initialize();
 		client = new Gs2GoldClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
 
 		{
@@ -1164,6 +1163,7 @@ public class WalletTest extends TestCase {
 				WithdrawFromWalletResult result = client.withdrawFromWallet(request);
 				assertNotNull(result);
 				wallet1 = result.getItem();
+				assertTrue(false);
 			} catch (BadGatewayException e) {
 				// ok_(emessage.startswith("BadGateway:"))
 				assertEquals(e.getErrors().size(), 1);
@@ -1197,6 +1197,7 @@ public class WalletTest extends TestCase {
 				WithdrawFromMyWalletResult result = client.withdrawFromMyWallet(request);
 				assertNotNull(result);
 				wallet1 = result.getItem();
+				assertTrue(false);
 			} catch (BadGatewayException e) {
 				// ok_(emessage.startswith("BadGateway:"))
 				assertEquals(e.getErrors().size(), 1);
@@ -1244,17 +1245,13 @@ public class WalletTest extends TestCase {
 	@AfterClass
 	public static void shutdown() {
 		List<Gold> items;
-
 		{
 			DescribeGoldRequest request = new DescribeGoldRequest();
 			DescribeGoldResult result = client.describeGold(request);
-
 			items = result.getItems();
 		}
 
-		for (Iterator<Gold> itr = items.iterator(); itr.hasNext(); ) {
-			Gold item = itr.next();
-
+		for (Gold item: items) {
 			do {
 				GetGoldStatusRequest request = new GetGoldStatusRequest()
 						.withGoldName(item.getName());

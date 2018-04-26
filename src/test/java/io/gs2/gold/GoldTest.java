@@ -32,96 +32,14 @@ public class GoldTest extends TestCase {
 	protected static Gs2GoldClient client;
 	protected static Gs2GoldPrivateClient pclient;
 
-	protected static void ensureGoldEmpty() {
-		List<Gold> items;
-
-		{
-			DescribeGoldRequest request = new DescribeGoldRequest();
-			DescribeGoldResult result = client.describeGold(request);
-
-			items = result.getItems();
-		}
-
-		for (Iterator<Gold> itr = items.iterator(); itr.hasNext(); ) {
-			Gold item = itr.next();
-
-			do {
-				GetGoldStatusRequest request = new GetGoldStatusRequest()
-						.withGoldName(item.getName());
-				GetGoldStatusResult result = client.getGoldStatus(request);
-				String status = result.getStatus();
-				if (status.equals("ACTIVE")) break;
-				assertNotSame(status, "DELETED");
-				try {
-					Thread.sleep(1000 * 3);
-				} catch (InterruptedException e) { }
-			} while(true);
-
-			{
-				DeleteGoldRequest request = new DeleteGoldRequest()
-						.withGoldName(item.getName());
-				// DeleteGoldResult result = client.deleteGold(request);
-				client.deleteGold(request);
-			}
-
-			do {
-				GetGoldStatusRequest request = new GetGoldStatusRequest()
-						.withGoldName(item.getName());
-				GetGoldStatusResult result = client.getGoldStatus(request);
-				String status = result.getStatus();
-				if (status.equals("DELETED")) break;
-				try {
-					Thread.sleep(1000 * 3);
-				} catch (InterruptedException e) { }
-			} while(true);
-		}
-	}
-
-	protected static void ensureGoldExists() {
-		{
-			CreateGoldRequest request = new CreateGoldRequest()
-					.withName(GOLD_NAME1)
-					.withDescription("Gold 1")
-					.withServiceClass("gold1.nano")
-					.withBalanceMax(2000L)
-					.withResetType("weekly")
-					.withResetDayOfMonth(1)                // 無視される
-					.withResetDayOfWeek("tuesday")
-					.withResetHour(17)
-					.withLatestGainMax(450L)
-					.withNotificationUrl("http://example.com/");
-			try {
-				client.createGold(request);
-			} catch (BadRequestException e) {
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "name");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.name.error.duplicate");
-			}
-		}
-
-		do {
-			GetGoldStatusRequest request = new GetGoldStatusRequest()
-					.withGoldName(GOLD_NAME1);
-			GetGoldStatusResult result = client.getGoldStatus(request);
-			String status = result.getStatus();
-			if (status.equals("ACTIVE")) break;
-			assertNotSame(status, "DELETED");
-			try {
-				Thread.sleep(1000 * 3);
-			} catch (InterruptedException e) { }
-		} while(true);
-	}
-
 	@BeforeClass
 	public static void startup() {
-		Gs2GoldClient.ENDPOINT = "gold-dev";
+		Initializer.initialize();
 		client = pclient = new Gs2GoldPrivateClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
 	}
 	
 	@Test
 	public void basic() {
-		ensureGoldEmpty();
-
 		Gold gold1, gold2;
 
 		{
@@ -437,8 +355,6 @@ public class GoldTest extends TestCase {
 
 	@Test
 	public void testCreateGoldNameNone() {
-		ensureGoldEmpty();
-
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
 					//         .withName(GOLD_NAME1)
@@ -474,8 +390,6 @@ public class GoldTest extends TestCase {
 
 	@Test
 	public void testCreateGoldNameInvalid() {
-		ensureGoldEmpty();
-
 		CreateGoldRequest request = new CreateGoldRequest()
 				.withName("#")
 				.withServiceClass("gold1.nano")
@@ -493,8 +407,6 @@ public class GoldTest extends TestCase {
 
 	@Test
 	public void testCreateGoldServiceClassNone() {
-		ensureGoldEmpty();
-
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
 					.withName(GOLD_NAME1)
@@ -530,8 +442,6 @@ public class GoldTest extends TestCase {
 
 	@Test
 	public void testCreateGoldServiceClassInvalid() {
-		ensureGoldEmpty();
-
 		CreateGoldRequest request = new CreateGoldRequest()
 				.withName(GOLD_NAME1)
 				.withServiceClass("invalid")
@@ -549,8 +459,6 @@ public class GoldTest extends TestCase {
 
 	@Test
 	public void testCreateGoldNotificationUrlInvalid() {
-		ensureGoldEmpty();
-
 		CreateGoldRequest request = new CreateGoldRequest()
 				.withName(GOLD_NAME1)
 				.withServiceClass("gold1.nano")
@@ -569,8 +477,6 @@ public class GoldTest extends TestCase {
 
 	@Test
 	public void testDeleteGoldNameNone() {
-		ensureGoldEmpty();
-
 		{
 			DeleteGoldRequest request = new DeleteGoldRequest();
 			//                 .withGoldName(GOLD_NAME1)
@@ -602,8 +508,6 @@ public class GoldTest extends TestCase {
 
 	@Test
 	public void testDeleteGoldNameInvalid() {
-		ensureGoldEmpty();
-
 		DeleteGoldRequest request = new DeleteGoldRequest()
 				.withGoldName("invalid");
 		try {
@@ -669,236 +573,6 @@ public class GoldTest extends TestCase {
 	}
 
 	@Test
-	public void testCreateGoldDuplicate() {
-		ensureGoldExists();
-
-		CreateGoldRequest request = new CreateGoldRequest()
-				.withName(GOLD_NAME1)
-				.withServiceClass("gold1.nano");
-		try {
-			client.createGold(request);
-			assertTrue(false);
-		} catch (BadRequestException e) {
-			// ok_(emessage.startswith("BadRequest:"))
-			assertEquals(e.getErrors().size(), 1);
-			assertEquals(e.getErrors().get(0).getComponent(), "name");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.name.error.duplicate");
-		}
-	}
-
-	@Test
-	public void testGetGoldGoldNameNone() {
-		ensureGoldExists();
-
-		{
-			GetGoldRequest request = new GetGoldRequest();
-			//                 .withGoldName(GOLD_NAME1)
-			try {
-				client.getGold(request);
-				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.goldName.error.require");
-			}
-		}
-
-		{
-			GetGoldRequest request = new GetGoldRequest()
-					.withGoldName("");
-			try {
-				client.getGold(request);
-				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.goldName.error.require");
-			}
-		}
-	}
-
-	@Test
-	public void testGetGoldGoldNameInvalid() {
-		ensureGoldExists();
-
-		GetGoldRequest request = new GetGoldRequest()
-				.withGoldName("invalid");
-		try {
-			client.getGold(request);
-			assertTrue(false);
-		} catch (NotFoundException e) {
-			// ok_(emessage.startswith("NotFound:"))
-			assertEquals(e.getErrors().size(), 1);
-			assertEquals(e.getErrors().get(0).getComponent(), "gold");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
-		}
-	}
-
-	@Test
-	public void testGetWalletSettingsGoldNameNone() {
-		ensureGoldExists();
-
-		{
-			GetWalletSettingsRequest request = new GetWalletSettingsRequest();
-			//                 .withGoldName(GOLD_NAME1)
-			try {
-				client.getWalletSettings(request);
-				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
-			}
-		}
-
-		{
-			GetWalletSettingsRequest request = new GetWalletSettingsRequest()
-					.withGoldName("");
-			try {
-				client.getWalletSettings(request);
-				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
-			}
-		}
-	}
-
-	@Test
-	public void testGetWalletSettingsGoldNameInvalid() {
-		ensureGoldExists();
-
-		GetWalletSettingsRequest request = new GetWalletSettingsRequest()
-				.withGoldName("invalid");
-		try {
-			client.getWalletSettings(request);
-			assertTrue(false);
-		} catch (NotFoundException e) {
-			// ok_(emessage.startswith("NotFound:"))
-			assertEquals(e.getErrors().size(), 1);
-			assertEquals(e.getErrors().get(0).getComponent(), "gold");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
-		}
-	}
-
-	@Test
-	public void testUpdateGoldGoldNameNone() {
-		ensureGoldExists();
-
-		{
-			UpdateGoldRequest request = new UpdateGoldRequest()
-					//                 .withgoldName(GOLD_NAME1)
-					.withServiceClass("gold1.micro")
-					.withNotificationUrl("https://example.com/");
-			try {
-				client.updateGold(request);
-				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.goldName.error.require");
-			}
-		}
-
-		{
-			UpdateGoldRequest request = new UpdateGoldRequest()
-					.withGoldName("")
-					.withServiceClass("gold1.micro")
-					.withNotificationUrl("https://example.com/");
-			try {
-				client.updateGold(request);
-				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.goldName.error.require");
-			}
-		}
-	}
-
-	@Test
-	public void testUpdateGoldServiceClassNone() {
-		ensureGoldExists();
-
-		{
-			UpdateGoldRequest request = new UpdateGoldRequest()
-					.withGoldName(GOLD_NAME1)
-					//                 .withserviceClass("gold1.micro")
-					.withNotificationUrl("https://example.com/");
-			try {
-				client.updateGold(request);
-				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "serviceClass");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.serviceClass.error.require");
-			}
-		}
-
-		{
-			UpdateGoldRequest request = new UpdateGoldRequest()
-					.withGoldName(GOLD_NAME1)
-					.withServiceClass("")
-					.withNotificationUrl("https://example.com/");
-			try {
-				client.updateGold(request);
-				assertTrue(false);
-			} catch (BadRequestException e) {
-				// ok_(emessage.startswith("BadRequest:"))
-				assertEquals(e.getErrors().size(), 1);
-				assertEquals(e.getErrors().get(0).getComponent(), "serviceClass");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.serviceClass.error.require");
-			}
-		}
-	}
-
-	@Test
-	public void testUpdateGoldServiceClassInvalid() {
-		ensureGoldExists();
-
-		UpdateGoldRequest request = new UpdateGoldRequest()
-				.withGoldName(GOLD_NAME1)
-				.withServiceClass("invalid")
-				.withNotificationUrl("https://example.com/");
-		try {
-			client.updateGold(request);
-			assertTrue(false);
-		} catch (BadRequestException e) {
-			// ok_(emessage.startswith("BadRequest:"))
-			assertEquals(e.getErrors().size(), 1);
-			assertEquals(e.getErrors().get(0).getComponent(), "serviceClass");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.serviceClass.error.invalid");
-		}
-	}
-
-	@Test
-	public void testUpdateGoldNotificationUrlInvalid() {
-		ensureGoldExists();
-
-		UpdateGoldRequest request = new UpdateGoldRequest()
-				.withGoldName(GOLD_NAME1)
-				.withServiceClass("gold1.micro")
-				.withNotificationUrl("invalid");
-		try {
-			client.updateGold(request);
-			assertTrue(false);
-		} catch (BadRequestException e) {
-			// ok_(emessage.startswith("BadRequest:"))
-			assertEquals(e.getErrors().size(), 1);
-			assertEquals(e.getErrors().get(0).getComponent(), "notificationUrl");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.notificationUrl.error.invalid");
-		}
-	}
-
-	@Test
 	public void testUpdateGoldGoldNotActive() {
 		// 専用の GOLD_NAME4 しか操作しないので前提条件不要
 
@@ -940,6 +614,43 @@ public class GoldTest extends TestCase {
 
 	@AfterClass
 	public static void shutdown() {
-		ensureGoldEmpty();
+		List<Gold> items;
+		{
+			DescribeGoldRequest request = new DescribeGoldRequest();
+			DescribeGoldResult result = client.describeGold(request);
+			items = result.getItems();
+		}
+
+		for (Gold item: items) {
+			do {
+				GetGoldStatusRequest request = new GetGoldStatusRequest()
+						.withGoldName(item.getName());
+				GetGoldStatusResult result = client.getGoldStatus(request);
+				String status = result.getStatus();
+				if (status.equals("ACTIVE")) break;
+				assertNotSame(status, "DELETED");
+				try {
+					Thread.sleep(1000 * 3);
+				} catch (InterruptedException e) { }
+			} while(true);
+
+			{
+				DeleteGoldRequest request = new DeleteGoldRequest()
+						.withGoldName(item.getName());
+				// DeleteGoldResult result = client.deleteGold(request);
+				client.deleteGold(request);
+			}
+
+			do {
+				GetGoldStatusRequest request = new GetGoldStatusRequest()
+						.withGoldName(item.getName());
+				GetGoldStatusResult result = client.getGoldStatus(request);
+				String status = result.getStatus();
+				if (status.equals("DELETED")) break;
+				try {
+					Thread.sleep(1000 * 3);
+				} catch (InterruptedException e) { }
+			} while(true);
+		}
 	}
 }
