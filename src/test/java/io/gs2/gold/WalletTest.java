@@ -151,8 +151,8 @@ public class WalletTest extends TestCase {
 			wallet1 = result.getItem();
 			// assertEquals(wallet1.getGoldId(), gold.getGoldId());
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(0));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertEquals(wallet1.getBalance(), Long.valueOf(0));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(0));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -167,8 +167,8 @@ public class WalletTest extends TestCase {
 			wallet1 = result.getItem();
 			// assertEquals(wallet1.getGoldId(), gold.getGoldId());
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(0));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertEquals(wallet1.getBalance(), Long.valueOf(0));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(0));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -178,13 +178,13 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID)
-					.withValue(40);
+					.withValue(40L);
 			DepositIntoWalletResult result = client.depositIntoWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(40));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(40));
+			assertEquals(wallet1.getBalance(), Long.valueOf(40));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(40));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -193,45 +193,45 @@ public class WalletTest extends TestCase {
 		{
 			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 					.withGoldName(gold.getName())
-					.withValue(60)
+					.withValue(60L)
 					.withAccessToken(accessToken);
 			DepositIntoMyWalletResult result = client.depositIntoMyWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(100));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(100));
+			assertEquals(wallet1.getBalance(), Long.valueOf(100));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(100));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
 
 		// 取得量をリセット
 		{
-			ResetLatestGainRequest request = new ResetLatestGainRequest()
+			SetLatestGainRequest request = new SetLatestGainRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID)
-					.withValue(70);
-			ResetLatestGainResult result = client.resetLatestGain(request);
+					.withValue(70L);
+			SetLatestGainResult result = client.setLatestGain(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(100));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(70));
+			assertEquals(wallet1.getBalance(), Long.valueOf(100));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(70));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
 
 		{
-			ResetLatestGainRequest request = new ResetLatestGainRequest()
+			SetLatestGainRequest request = new SetLatestGainRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID);
 			// value を指定しなければ 0
-			ResetLatestGainResult result = client.resetLatestGain(request);
+			SetLatestGainResult result = client.setLatestGain(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(100));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertEquals(wallet1.getBalance(), Long.valueOf(100));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(0));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -241,13 +241,13 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID)
-					.withValue(40);
+					.withValue(40L);
 			WithdrawFromWalletResult result = client.withdrawFromWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(60));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertEquals(wallet1.getBalance(), Long.valueOf(60));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(0));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -256,14 +256,14 @@ public class WalletTest extends TestCase {
 		{
 			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 					.withGoldName(gold.getName())
-					.withValue(20)
+					.withValue(20L)
 					.withAccessToken(accessToken);
 			WithdrawFromMyWalletResult result = client.withdrawFromMyWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(40));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertEquals(wallet1.getBalance(), Long.valueOf(40));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(0));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -273,7 +273,7 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID2)
-					.withValue(60);
+					.withValue(60L);
 			try {
 				client.withdrawFromWallet(request);   // ウォレットがなければ残高も 0 なので、残高不足エラーになる
 				assertTrue(false);
@@ -290,13 +290,13 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(gold.getName())
 					.withUserId(USER_ID2)
-					.withValue(50);
+					.withValue(50L);
 			DepositIntoWalletResult result = client.depositIntoWallet(request);
 			assertNotNull(result);
 			wallet2 = result.getItem();
 			assertEquals(wallet2.getUserId(), USER_ID2);
-			assertEquals(wallet2.getBalance(), Integer.valueOf(50));
-			assertEquals(wallet2.getLatestGain(), Integer.valueOf(50));
+			assertEquals(wallet2.getBalance(), Long.valueOf(50));
+			assertEquals(wallet2.getLatestGain(), Long.valueOf(50));
 			assertNotNull(wallet2.getCreateAt());
 			assertNotNull(wallet2.getUpdateAt());
 		}
@@ -310,8 +310,8 @@ public class WalletTest extends TestCase {
 			wallet2 = result.getItem();
 			// assertEquals(wallet2.getGoldId(), gold.getGoldId());
 			assertEquals(wallet2.getUserId(), USER_ID2);
-			assertEquals(wallet2.getBalance(), Integer.valueOf(50));
-			assertEquals(wallet2.getLatestGain(), Integer.valueOf(50));
+			assertEquals(wallet2.getBalance(), Long.valueOf(50));
+			assertEquals(wallet2.getLatestGain(), Long.valueOf(50));
 			assertNotNull(wallet2.getCreateAt());
 			assertNotNull(wallet2.getUpdateAt());
 		}
@@ -456,7 +456,7 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					// .withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.depositIntoWallet(request);
 				assertTrue(false);
@@ -472,7 +472,7 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName("")
 					.withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.depositIntoWallet(request);
 				assertTrue(false);
@@ -490,7 +490,7 @@ public class WalletTest extends TestCase {
 		{
 			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 					// .withGoldName(GOLD_NAME1)
-					.withValue(0)
+					.withValue(0L)
 					.withAccessToken(accessToken);
 			try {
 				client.depositIntoMyWallet(request);
@@ -506,7 +506,7 @@ public class WalletTest extends TestCase {
 		{
 			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 					.withGoldName("")
-					.withValue(0)
+					.withValue(0L)
 					.withAccessToken(accessToken);
 			try {
 				client.depositIntoMyWallet(request);
@@ -526,7 +526,7 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					// .withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.withdrawFromWallet(request);
 				assertTrue(false);
@@ -542,7 +542,7 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName("")
 					.withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.withdrawFromWallet(request);
 				assertTrue(false);
@@ -560,7 +560,7 @@ public class WalletTest extends TestCase {
 		{
 			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 					// .withGoldName(GOLD_NAME1)
-					.withValue(0)
+					.withValue(0L)
 					.withAccessToken(accessToken);
 			try {
 				client.withdrawFromMyWallet(request);
@@ -576,7 +576,7 @@ public class WalletTest extends TestCase {
 		{
 			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 					.withGoldName("")
-					.withValue(0)
+					.withValue(0L)
 					.withAccessToken(accessToken);
 			try {
 				client.withdrawFromMyWallet(request);
@@ -591,36 +591,36 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testResetLatestGainGoldNameNone() {
+	public void testSetLatestGainGoldNameNone() {
 		{
-			ResetLatestGainRequest request = new ResetLatestGainRequest()
+			SetLatestGainRequest request = new SetLatestGainRequest()
 					// .withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
-				client.resetLatestGain(request);
+				client.setLatestGain(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.goldName.error.require");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 
 		{
-			ResetLatestGainRequest request = new ResetLatestGainRequest()
+			SetLatestGainRequest request = new SetLatestGainRequest()
 					.withGoldName("")
 					.withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
-				client.resetLatestGain(request);
+				client.setLatestGain(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "goldName");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.goldName.error.require");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.goldName.error.require");
 			}
 		}
 	}
@@ -665,7 +665,7 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					//                 .withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.depositIntoWallet(request);
 				assertTrue(false);
@@ -681,7 +681,7 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId("")
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.depositIntoWallet(request);
 				assertTrue(false);
@@ -700,7 +700,7 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					//                 .withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.withdrawFromWallet(request);
 				assertTrue(false);
@@ -716,7 +716,7 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId("")
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.withdrawFromWallet(request);
 				assertTrue(false);
@@ -730,14 +730,14 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testResetLatestGainUserIdNone() {
+	public void testSetLatestGainUserIdNone() {
 		{
-			ResetLatestGainRequest request = new ResetLatestGainRequest()
+			SetLatestGainRequest request = new SetLatestGainRequest()
 					.withGoldName(GOLD_NAME1)
 					//                 .withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
-				client.resetLatestGain(request);
+				client.setLatestGain(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -748,12 +748,12 @@ public class WalletTest extends TestCase {
 		}
 
 		{
-			ResetLatestGainRequest request = new ResetLatestGainRequest()
+			SetLatestGainRequest request = new SetLatestGainRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId("")
-					.withValue(0);
+					.withValue(0L);
 			try {
-				client.resetLatestGain(request);
+				client.setLatestGain(request);
 				assertTrue(false);
 			} catch (BadRequestException e) {
 				// ok_(emessage.startswith("BadRequest:"))
@@ -770,7 +770,7 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID);
-			//         .withValue(0)
+			//         .withValue(0L)
 			try {
 				client.depositIntoWallet(request);
 				assertTrue(false);
@@ -804,7 +804,7 @@ public class WalletTest extends TestCase {
 		{
 			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 					.withGoldName(GOLD_NAME1)
-					//         .withValue(0)
+					//         .withValue(0L)
 					.withAccessToken(accessToken);
 			try {
 				client.depositIntoMyWallet(request);
@@ -840,7 +840,7 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME1)
 					.withUserId(USER_ID);
-			//         .withValue(0)
+			//         .withValue(0L)
 			try {
 				client.withdrawFromWallet(request);
 				assertTrue(false);
@@ -874,7 +874,7 @@ public class WalletTest extends TestCase {
 		{
 			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 					.withGoldName(GOLD_NAME1)
-					//         .withValue(0)
+					//         .withValue(0L)
 					.withAccessToken(accessToken);
 			try {
 				client.withdrawFromMyWallet(request);
@@ -909,7 +909,7 @@ public class WalletTest extends TestCase {
 		DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 				.withGoldName(GOLD_NAME1)
 				.withUserId(USER_ID)
-				.withValue(-100);
+				.withValue(-100L);
 		try {
 			client.depositIntoWallet(request);
 			assertTrue(false);
@@ -925,7 +925,7 @@ public class WalletTest extends TestCase {
 	public void testDepositIntoMyWalletValueNegative() {
 		DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 				.withGoldName(GOLD_NAME1)
-				.withValue(-100)
+				.withValue(-100L)
 				.withAccessToken(accessToken);
 		try {
 			client.depositIntoMyWallet(request);
@@ -943,7 +943,7 @@ public class WalletTest extends TestCase {
 		WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 				.withGoldName(GOLD_NAME1)
 				.withUserId(USER_ID)
-				.withValue(-100);
+				.withValue(-100L);
 		try {
 			client.withdrawFromWallet(request);
 			assertTrue(false);
@@ -959,7 +959,7 @@ public class WalletTest extends TestCase {
 	public void testWithdrawFromMyWalletValueNegative() {
 		WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 				.withGoldName(GOLD_NAME1)
-				.withValue(-100)
+				.withValue(-100L)
 				.withAccessToken(accessToken);
 		try {
 			client.withdrawFromMyWallet(request);
@@ -973,19 +973,19 @@ public class WalletTest extends TestCase {
 	}
 
 	@Test
-	public void testResetLatestGainValueNegative() {
-		ResetLatestGainRequest request = new ResetLatestGainRequest()
+	public void testSetLatestGainValueNegative() {
+		SetLatestGainRequest request = new SetLatestGainRequest()
 				.withGoldName(GOLD_NAME1)
 				.withUserId(USER_ID)
-				.withValue(-100);
+				.withValue(-100L);
 		try {
-			client.resetLatestGain(request);
+			client.setLatestGain(request);
 			assertTrue(false);
 		} catch (BadRequestException e) {
 			// ok_(emessage.startswith("BadRequest:"))
 			assertEquals(e.getErrors().size(), 1);
 			assertEquals(e.getErrors().get(0).getComponent(), "value");
-			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.require");
+			assertEquals(e.getErrors().get(0).getMessage(), "gold.wallet.value.error.invalid");
 		}
 	}
 
@@ -1002,7 +1002,7 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME4)
 					.withUserId(USER_ID)
-					.withValue(0);
+					.withValue(0L);
 			try {
 				client.depositIntoWallet(request);
 				assertTrue(false);
@@ -1010,7 +1010,7 @@ public class WalletTest extends TestCase {
 				// ok_(emessage.startswith("BadRequest:"))
 				assertEquals(e.getErrors().size(), 1);
 				assertEquals(e.getErrors().get(0).getComponent(), "gold");
-				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.gold.error.notFound");
+				assertEquals(e.getErrors().get(0).getMessage(), "gold.gold.error.notFound");
 			}
 		}
 
@@ -1042,13 +1042,13 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME2)
 					.withUserId(USER_ID)
-					.withValue(100);
+					.withValue(100L);
 			DepositIntoWalletResult result = client.depositIntoWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(100));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(100));
+			assertEquals(wallet1.getBalance(), Long.valueOf(100));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(100));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -1057,13 +1057,13 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME2)
 					.withUserId(USER_ID)
-					.withValue(60);
+					.withValue(60L);
 			WithdrawFromWalletResult result = client.withdrawFromWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(40));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(100));
+			assertEquals(wallet1.getBalance(), Long.valueOf(40));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(100));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -1076,7 +1076,7 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME3)
 					.withUserId(USER_ID)
-					.withValue(100)
+					.withValue(100L)
 					.withContext("failure");
 			try {
 				client.depositIntoWallet(request);
@@ -1098,8 +1098,8 @@ public class WalletTest extends TestCase {
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(0));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertEquals(wallet1.getBalance(), Long.valueOf(0));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(0));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -1108,7 +1108,7 @@ public class WalletTest extends TestCase {
 		{
 			DepositIntoMyWalletRequest request = new DepositIntoMyWalletRequest()
 					.withGoldName(GOLD_NAME3)
-					.withValue(100)
+					.withValue(100L)
 					.withContext("failure")
 					.withAccessToken(accessToken);
 			try {
@@ -1131,8 +1131,8 @@ public class WalletTest extends TestCase {
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(0));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(0));
+			assertEquals(wallet1.getBalance(), Long.valueOf(0));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(0));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -1142,14 +1142,14 @@ public class WalletTest extends TestCase {
 			DepositIntoWalletRequest request = new DepositIntoWalletRequest()
 					.withGoldName(GOLD_NAME3)
 					.withUserId(USER_ID)
-					.withValue(100)
+					.withValue(100L)
 					.withContext("success");   // "failure" 以外なら何でもよい
 			DepositIntoWalletResult result = client.depositIntoWallet(request);
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(100));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(100));
+			assertEquals(wallet1.getBalance(), Long.valueOf(100));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(100));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -1159,7 +1159,7 @@ public class WalletTest extends TestCase {
 			WithdrawFromWalletRequest request = new WithdrawFromWalletRequest()
 					.withGoldName(GOLD_NAME3)
 					.withUserId(USER_ID)
-					.withValue(60)
+					.withValue(60L)
 					.withContext("failure");
 			try {
 				WithdrawFromWalletResult result = client.withdrawFromWallet(request);
@@ -1181,8 +1181,8 @@ public class WalletTest extends TestCase {
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(100));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(100));
+			assertEquals(wallet1.getBalance(), Long.valueOf(100));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(100));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}
@@ -1191,7 +1191,7 @@ public class WalletTest extends TestCase {
 		{
 			WithdrawFromMyWalletRequest request = new WithdrawFromMyWalletRequest()
 					.withGoldName(GOLD_NAME3)
-					.withValue(60)
+					.withValue(60L)
 					.withContext("failure")
 					.withAccessToken(accessToken);
 			try {
@@ -1215,8 +1215,8 @@ public class WalletTest extends TestCase {
 			assertNotNull(result);
 			wallet1 = result.getItem();
 			assertEquals(wallet1.getUserId(), USER_ID);
-			assertEquals(wallet1.getBalance(), Integer.valueOf(100));
-			assertEquals(wallet1.getLatestGain(), Integer.valueOf(100));
+			assertEquals(wallet1.getBalance(), Long.valueOf(100));
+			assertEquals(wallet1.getLatestGain(), Long.valueOf(100));
 			assertNotNull(wallet1.getCreateAt());
 			assertNotNull(wallet1.getUpdateAt());
 		}

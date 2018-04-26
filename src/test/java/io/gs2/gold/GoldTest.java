@@ -83,12 +83,12 @@ public class GoldTest extends TestCase {
 					.withName(GOLD_NAME1)
 					.withDescription("Gold 1")
 					.withServiceClass("gold1.nano")
-					.withBalanceMax(2000)
+					.withBalanceMax(2000L)
 					.withResetType("weekly")
 					.withResetDayOfMonth(1)                // 無視される
 					.withResetDayOfWeek("tuesday")
 					.withResetHour(17)
-					.withLatestGainMax(450)
+					.withLatestGainMax(450L)
 					.withNotificationUrl("http://example.com/");
 			try {
 				client.createGold(request);
@@ -129,12 +129,12 @@ public class GoldTest extends TestCase {
 					.withName(GOLD_NAME1)
 					.withDescription("Gold 1")
 					.withServiceClass("gold1.nano")
-					.withBalanceMax(2000)
+					.withBalanceMax(2000L)
 					.withResetType("weekly")
 					.withResetDayOfMonth(1)				// 無視される
 					.withResetDayOfWeek("tuesday")
 					.withResetHour(17)
-					.withLatestGainMax(450)
+					.withLatestGainMax(450L)
 					.withNotificationUrl("http://example.com/");
 			CreateGoldResult result = client.createGold(request);
 			assertNotNull(result);
@@ -144,11 +144,11 @@ public class GoldTest extends TestCase {
 			assertEquals(gold1.getName(), GOLD_NAME1);
 			assertEquals(gold1.getDescription(), "Gold 1");
 			assertEquals(gold1.getServiceClass(), "gold1.nano");
-			assertEquals(gold1.getBalanceMax(), Integer.valueOf(2000));
+			assertEquals(gold1.getBalanceMax(), Long.valueOf(2000));
 			assertEquals(gold1.getResetType(), "weekly");
 			assertEquals(gold1.getResetDayOfWeek(), "tuesday");
 			assertEquals(gold1.getResetHour(), Integer.valueOf(17));
-			assertEquals(gold1.getLatestGainMax(), Integer.valueOf(450));
+			assertEquals(gold1.getLatestGainMax(), Long.valueOf(450));
 			assertEquals(gold1.getNotificationUrl(), "http://example.com/");
 			assertNotNull(gold1.getCreateAt());
 		}
@@ -177,12 +177,12 @@ public class GoldTest extends TestCase {
 			assertEquals(gold2.getName(), GOLD_NAME2);
 			assertNull(gold2.getDescription());
 			assertEquals(gold2.getServiceClass(), "gold1.nano");
-			assertEquals(gold2.getBalanceMax(), Integer.valueOf(99999999));
+			assertEquals(gold2.getBalanceMax(), Long.valueOf(99999999));
 			assertEquals(gold2.getResetType(), "none");
 			assertNull(gold2.getResetDayOfMonth());
 			assertNull(gold2.getResetDayOfWeek());
 			assertNull(gold2.getResetHour());
-			assertEquals(gold2.getLatestGainMax(), Integer.valueOf(99999999));
+			assertEquals(gold2.getLatestGainMax(), Long.valueOf(99999999));
 			assertNull(gold2.getNotificationUrl());
 			assertNotNull(gold2.getCreateAt());
 		}
@@ -210,11 +210,11 @@ public class GoldTest extends TestCase {
 			assertEquals(gold1.getName(), GOLD_NAME1);
 			assertEquals(gold1.getDescription(), "Gold 1");
 			assertEquals(gold1.getServiceClass(), "gold1.nano");
-			assertEquals(gold1.getBalanceMax(), Integer.valueOf(2000));
+			assertEquals(gold1.getBalanceMax(), Long.valueOf(2000));
 			assertEquals(gold1.getResetType(), "weekly");
 			assertEquals(gold1.getResetDayOfWeek(), "tuesday");
 			assertEquals(gold1.getResetHour(), Integer.valueOf(17));
-			assertEquals(gold1.getLatestGainMax(), Integer.valueOf(450));
+			assertEquals(gold1.getLatestGainMax(), Long.valueOf(450));
 			assertEquals(gold1.getNotificationUrl(), "http://example.com/");
 			assertNotNull(gold1.getCreateAt());
 		}
@@ -226,11 +226,11 @@ public class GoldTest extends TestCase {
 			assertNotNull(result);
 			WalletSettings walletSettings1 = result.getItem();
 			assertNotNull(walletSettings1);
-			assertEquals(walletSettings1.getBalanceMax(), Integer.valueOf(2000));
+			assertEquals(walletSettings1.getBalanceMax(), Long.valueOf(2000));
 			assertEquals(walletSettings1.getResetType(), "weekly");
 			assertEquals(walletSettings1.getResetDayOfWeek(), "tuesday");
 			assertEquals(walletSettings1.getResetHour(), Integer.valueOf(17));
-			assertEquals(walletSettings1.getLatestGainMax(), Integer.valueOf(450));
+			assertEquals(walletSettings1.getLatestGainMax(), Long.valueOf(450));
 			assertNotNull(walletSettings1.getCreateAt());
 		}
 
@@ -247,12 +247,12 @@ public class GoldTest extends TestCase {
 			assertEquals(gold1.getName(), GOLD_NAME1);
 			assertNull(gold1.getDescription());
 			assertEquals(gold1.getServiceClass(), "gold1.micro");
-			assertEquals(gold1.getBalanceMax(), Integer.valueOf(99999999));
+			assertEquals(gold1.getBalanceMax(), Long.valueOf(99999999));
 			assertEquals(gold1.getResetType(), "none");
 			assertNull(gold1.getResetDayOfMonth());
 			assertNull(gold1.getResetDayOfWeek());
 			assertNull(gold1.getResetHour());
-			assertEquals(gold1.getLatestGainMax(), Integer.valueOf(99999999));
+			assertEquals(gold1.getLatestGainMax(), Long.valueOf(99999999));
 			assertNull(gold1.getNotificationUrl());
 			assertNotNull(gold1.getCreateAt());
 		}
