@@ -55,27 +55,4 @@ public class Gs2GoldPrivateClient extends Gs2GoldClient {
 		return doRequest(get, DescribeGoldByOwnerIdResult.class);
 	}
 
-	/**
-	 * ゴールド内のウォレット一覧を取得
-	 * 
-	 * @param request リクエストパラメータ
-	 * @return ウォレット一覧
-	 */
-	public DescribeAllWalletResult describeAllWallet(DescribeAllWalletRequest request) {
-		String url = Gs2Constant.ENDPOINT_HOST + "/system/gold/" + request.getGoldId() + "/wallet";
-		List<NameValuePair> queryString = new ArrayList<>();
-		if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
-		if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", request.getPageToken()));
-		if(queryString.size() > 0) {
-			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
-		}
-		HttpGet get = createHttpGet(
-				url, 
-				credential, 
-				ENDPOINT,
-				DescribeAllWalletRequest.Constant.MODULE,
-				DescribeAllWalletRequest.Constant.FUNCTION);
-		return doRequest(get, DescribeAllWalletResult.class);
-	}
-
 }

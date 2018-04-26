@@ -14,8 +14,8 @@ import io.gs2.exception.BadGatewayException;
 import io.gs2.exception.BadRequestException;
 import io.gs2.exception.NotFoundException;
 import io.gs2.gold.control.CreateGoldRequest;
-import io.gs2.gold.control.DescribeAllWalletRequest;
-import io.gs2.gold.control.DescribeAllWalletResult;
+import io.gs2.gold.control.DescribeWalletRequest;
+import io.gs2.gold.control.DescribeWalletResult;
 
 import io.gs2.gold.model.Gold;
 import io.gs2.gold.model.Wallet;
@@ -40,7 +40,6 @@ public class WalletTest extends TestCase {
 	protected static String USER_ID2 = "user-0002";
 
 	protected static Gs2GoldClient client;
-	protected static Gs2GoldPrivateClient pclient;
 	protected static Gold gold;
 	protected static Gold gold2;
 	protected static Gold gold3;
@@ -53,7 +52,7 @@ public class WalletTest extends TestCase {
 		String region = "ap-northeast-1";
 		Gs2AuthClient.ENDPOINT = "auth-dev";
 		Gs2GoldClient.ENDPOINT = "gold-dev";
-		client = pclient = new Gs2GoldPrivateClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
+		client = new Gs2GoldClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET));
 
 		{
 			CreateGoldRequest request = new CreateGoldRequest()
@@ -318,9 +317,9 @@ public class WalletTest extends TestCase {
 
 		// gold 内のウォレットを列挙
 		{
-			DescribeAllWalletRequest request = new DescribeAllWalletRequest()
-					.withGoldId(gold.getGoldId());
-			DescribeAllWalletResult result = pclient.describeAllWallet(request);
+			DescribeWalletRequest request = new DescribeWalletRequest()
+					.withGoldName(gold.getName());
+			DescribeWalletResult result = client.describeWallet(request);
 			assertNotNull(result.getItems());
 			assertEquals(result.getItems().size(), 2);
 			if (wallet2.getUserId().equals(result.getItems().get(0).getUserId())) {
@@ -348,10 +347,10 @@ public class WalletTest extends TestCase {
 			String nextPageToken;
 
 			{
-				DescribeAllWalletRequest request = new DescribeAllWalletRequest()
-						.withGoldId(gold.getGoldId())
+				DescribeWalletRequest request = new DescribeWalletRequest()
+						.withGoldName(gold.getName())
 						.withLimit(1);
-				DescribeAllWalletResult result = pclient.describeAllWallet(request);
+				DescribeWalletResult result = client.describeWallet(request);
 				assertNotNull(result.getItems());
 				assertEquals(result.getItems().size(), 1);
 				// assertEquals(result.getItems().get(0).getGoldId(), wallet1.getGoldId());
@@ -367,10 +366,10 @@ public class WalletTest extends TestCase {
 
 			// ページトークンを指定して、前の列挙の続きを取得
 			{
-				DescribeAllWalletRequest request = new DescribeAllWalletRequest()
-						.withGoldId(gold.getGoldId())
+				DescribeWalletRequest request = new DescribeWalletRequest()
+						.withGoldName(gold.getName())
 						.withPageToken(nextPageToken);
-				DescribeAllWalletResult result = pclient.describeAllWallet(request);
+				DescribeWalletResult result = client.describeWallet(request);
 				assertNotNull(result.getItems());
 				assertEquals(result.getItems().size(), 1);
 				// assertEquals(result.getItems().get(0).getGoldId(), wallet2.getGoldId());
