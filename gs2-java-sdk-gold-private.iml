@@ -12,6 +12,12 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.javacrumbs.json-unit:json-unit:1.5.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.javacrumbs.json-unit:json-unit-core:1.5.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
+    <orderEntry type="module" module-name="gs2-java-sdk-variable" scope="TEST" />
+    <orderEntry type="module" module-name="gs2-java-sdk-script" scope="TEST" />
+    <orderEntry type="module" module-name="gs2-java-sdk-key" scope="TEST" />
     <orderEntry type="module" module-name="gs2-java-sdk-auth" scope="TEST" />
     <orderEntry type="module" module-name="gs2-java-sdk-core" />
     <orderEntry type="library" name="Maven: org.json:json:20160212" level="project" />

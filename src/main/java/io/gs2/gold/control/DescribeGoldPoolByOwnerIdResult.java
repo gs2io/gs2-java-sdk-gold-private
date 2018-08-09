@@ -1,10 +1,9 @@
 package io.gs2.gold.control;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.gs2.gold.model.GoldPool;
 
-import io.gs2.gold.model.Gold;
+import java.util.List;
 
 /**
  * ゴールド一覧取得結果。
@@ -13,10 +12,10 @@ import io.gs2.gold.model.Gold;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class DescribeGoldByOwnerIdResult {
+public class DescribeGoldPoolByOwnerIdResult {
 
 	/** ゴールド一覧 */
-	List<Gold> items;
+	List<GoldPool> items;
 	/** 次のページを取得するためのトークン */
 	String nextPageToken;
 	
@@ -37,7 +36,7 @@ public class DescribeGoldByOwnerIdResult {
 	 * 
 	 * @return ゴールド一覧
 	 */
-	public List<Gold> getItems() {
+	public List<GoldPool> getItems() {
 		return items;
 	}
 	
@@ -46,14 +45,14 @@ public class DescribeGoldByOwnerIdResult {
 	 * 
 	 * @param items ゴールド一覧
 	 */
-	public void setItems(List<Gold> items) {
+	public void setItems(List<GoldPool> items) {
 		this.items = items;
 	}
 	
 	/**
 	 * 次のページを取得するためのトークンを取得。
 	 * 
-	 * {@link DescribeGoldByOwnerIdRequest} に指定することで、次のページを取得できます。
+	 * {@link DescribeGoldPoolByOwnerIdRequest} に指定することで、次のページを取得できます。
 	 * 
 	 * @return トークン
 	 */

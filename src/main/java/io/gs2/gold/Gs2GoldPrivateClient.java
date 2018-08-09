@@ -1,19 +1,16 @@
 package io.gs2.gold;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.gs2.Gs2Constant;
+import io.gs2.gold.control.DescribeGoldPoolByOwnerIdRequest;
+import io.gs2.gold.control.DescribeGoldPoolByOwnerIdResult;
+import io.gs2.model.IGs2Credential;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
-import io.gs2.Gs2Constant;
-import io.gs2.gold.control.DescribeAllWalletRequest;
-import io.gs2.gold.control.DescribeAllWalletResult;
-import io.gs2.gold.control.DescribeGoldByOwnerIdRequest;
-import io.gs2.gold.control.DescribeGoldByOwnerIdResult;
-import io.gs2.model.IGs2Credential;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GS2 Wallet API クライアント
@@ -38,8 +35,8 @@ public class Gs2GoldPrivateClient extends Gs2GoldClient {
 	 * @param request リクエストパラメータ
 	 * @return ゴールド一覧
 	 */
-	public DescribeGoldByOwnerIdResult describeGoldByOwnerId(DescribeGoldByOwnerIdRequest request) {
-		String url = Gs2Constant.ENDPOINT_HOST + "/system/" + request.getOwnerId() + "/gold";
+	public DescribeGoldPoolByOwnerIdResult describeGoldPoolByOwnerId(DescribeGoldPoolByOwnerIdRequest request) {
+		String url = Gs2Constant.ENDPOINT_HOST + "/system/" + request.getOwnerId() + "/goldPool";
 		List<NameValuePair> queryString = new ArrayList<>();
 		if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
 		if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", request.getPageToken()));
@@ -50,9 +47,9 @@ public class Gs2GoldPrivateClient extends Gs2GoldClient {
 				url,
 				credential,
 				ENDPOINT,
-				DescribeGoldByOwnerIdRequest.Constant.MODULE,
-				DescribeGoldByOwnerIdRequest.Constant.FUNCTION);
-		return doRequest(get, DescribeGoldByOwnerIdResult.class);
+				DescribeGoldPoolByOwnerIdRequest.Constant.MODULE,
+				DescribeGoldPoolByOwnerIdRequest.Constant.FUNCTION);
+		return doRequest(get, DescribeGoldPoolByOwnerIdResult.class);
 	}
 
 }

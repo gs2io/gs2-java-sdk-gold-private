@@ -10,7 +10,7 @@ import io.gs2.gold.Gs2Gold;
  *
  */
 @SuppressWarnings("serial")
-public class DescribeGoldByOwnerIdRequest extends Gs2BasicRequest<DescribeGoldByOwnerIdRequest> {
+public class DescribeGoldPoolByOwnerIdRequest extends Gs2BasicRequest<DescribeGoldPoolByOwnerIdRequest> {
 
 	public static class Constant extends Gs2Gold.Constant {
 		public static final String FUNCTION = "DescribeGold";
@@ -47,7 +47,7 @@ public class DescribeGoldByOwnerIdRequest extends Gs2BasicRequest<DescribeGoldBy
 	 * @param ownerId オーナーID
 	 * @return this
 	 */
-	public DescribeGoldByOwnerIdRequest withOwnerId(String ownerId) {
+	public DescribeGoldPoolByOwnerIdRequest withOwnerId(String ownerId) {
 		setOwnerId(ownerId);
 		return this;
 	}
@@ -76,7 +76,7 @@ public class DescribeGoldByOwnerIdRequest extends Gs2BasicRequest<DescribeGoldBy
 	 * @param pageToken 取得開始位置トークン
 	 * @return this
 	 */
-	public DescribeGoldByOwnerIdRequest withPageToken(String pageToken) {
+	public DescribeGoldPoolByOwnerIdRequest withPageToken(String pageToken) {
 		setPageToken(pageToken);
 		return this;
 	}
@@ -105,7 +105,7 @@ public class DescribeGoldByOwnerIdRequest extends Gs2BasicRequest<DescribeGoldBy
 	 * @param count 取得件数
 	 * @return this
 	 */
-	public DescribeGoldByOwnerIdRequest withLimit(Integer limit) {
+	public DescribeGoldPoolByOwnerIdRequest withLimit(Integer limit) {
 		setLimit(limit);
 		return this;
 	}
