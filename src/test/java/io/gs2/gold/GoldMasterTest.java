@@ -29,7 +29,7 @@ public class GoldMasterTest extends TestCase {
     private static String nextPageToken = null;
     private static String CLIENT_ID = "gs2_gold_test_seeds.GoldMasterTest-java";
     private static String CLIENT_SECRET = "XbAoGcL+4t9AjF1XYKCTUjPcGMf2uYihBxq6BWhW0Gc=";
-    private static BasicGs2Credential credential = new BasicGs2Credential("gs2_gold_test_seeds.GoldMasterTest-java", "XbAoGcL+4t9AjF1XYKCTUjPcGMf2uYihBxq6BWhW0Gc=");
+    private static BasicGs2Credential credential = new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET);
     private static List<GoldPool> goldPools = null;
     private static GoldPool goldPool1 = null;
     private static GoldMaster goldMaster1 = null;
@@ -43,6 +43,7 @@ public class GoldMasterTest extends TestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
+		shutdown();
 		try {
 
             {

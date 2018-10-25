@@ -34,7 +34,7 @@ public class WalletTest extends TestCase {
     private static String CLIENT_ID = "gs2_gold_test_seeds.WalletTest-java";
     private static String CLIENT_SECRET = "rC56jmchfY32VYavhqvRKMiNdeFcCFIXuFTMwXE4+Zc=";
     private static BasicGs2Credential credential = new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET);
-    private static Gs2AuthClient authClient = new Gs2AuthClient(new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET), "ap-northeast-1");
+    private static Gs2AuthClient authClient = new Gs2AuthClient(credential, REGION);
     private static List<GoldPool> goldPools = null;
     private static GoldPool goldPool1 = null;
     private static Wallet wallet1 = null;
@@ -49,6 +49,7 @@ public class WalletTest extends TestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
+		shutdown();
 		try {
 
             {

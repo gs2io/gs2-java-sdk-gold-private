@@ -57,6 +57,7 @@ public class CollaborateScriptGoldPoolTest extends TestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
+		shutdown();
 		try {
 
             {
@@ -118,85 +119,61 @@ public class CollaborateScriptGoldPoolTest extends TestCase {
     
     @Test
     public void testWithdrawFromWalletTriggerNotFound() {
-    
-    
     }
     
     
     @Test
     public void testCreateWalletTriggerPermissionDenied() {
-    
-    
     }
     
     
     @Test
     public void testCreateWalletTriggerNotFound() {
-    
-    
     }
     
     
     @Test
     public void testWithdrawFromWalletTrigger() {
-    
-    
     }
     
     
     @Test
     public void testCreateWalletTrigger() {
-    
-    
     }
     
     
     @Test
     public void testDepositIntoWalletTriggerPermissionDenied() {
-    
-    
     }
     
     
     @Test
     public void testDepositIntoWalletDoneTrigger() {
-    
-    
     }
     
     
     @Test
     public void testCreateWalletDoneTrigger() {
-    
-    
     }
     
     
     @Test
     public void testDepositIntoWalletTrigger() {
-    
-    
     }
     
     
     @Test
     public void testWithdrawFromWalletTriggerPermissionDenied() {
-    
-    
     }
     
     
     @Test
     public void testDepositIntoWalletTriggerNotFound() {
-    
-    
     }
     
     
     @Test
     public void testWithdrawFromWalletDoneTrigger() {
-    
-    
     }
     
 	@AfterClass

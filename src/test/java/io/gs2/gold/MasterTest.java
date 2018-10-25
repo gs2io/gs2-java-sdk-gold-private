@@ -45,6 +45,7 @@ public class MasterTest extends TestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
+		shutdown();
 		try {
 
             {

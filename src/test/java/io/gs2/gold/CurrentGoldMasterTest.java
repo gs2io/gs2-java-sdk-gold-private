@@ -43,6 +43,7 @@ public class CurrentGoldMasterTest extends TestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
+		shutdown();
 		try {
 
             {

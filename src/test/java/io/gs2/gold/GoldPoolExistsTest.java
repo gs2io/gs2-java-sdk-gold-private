@@ -29,7 +29,7 @@ public class GoldPoolExistsTest extends TestCase {
     private static String nextPageToken = null;
     private static String CLIENT_ID = "gs2_gold_test_seeds.GoldPoolExistsTest-java";
     private static String CLIENT_SECRET = "a9KO0tfx5kq5Mt1cNG7Ie8xEpyh6SIRgsh3ZwDm/hCs=";
-    private static BasicGs2Credential credential = new BasicGs2Credential("gs2_gold_test_seeds.GoldPoolExistsTest-java", "a9KO0tfx5kq5Mt1cNG7Ie8xEpyh6SIRgsh3ZwDm/hCs=");
+    private static BasicGs2Credential credential = new BasicGs2Credential(CLIENT_ID, CLIENT_SECRET);
     private static GoldPool goldPool1 = null;
     private static GoldPool goldPool2 = null;
     private static List<GoldPool> goldPools = null;
@@ -41,6 +41,7 @@ public class GoldPoolExistsTest extends TestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
+		shutdown();
 		try {
 
             {
